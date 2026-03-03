@@ -16,8 +16,8 @@ Lectures, tutorials, and laboratory demonstrations for first-year university stu
 
 A collection of tools I have developed to support student learning in chemistry:
 
-- **[Chemistry Unit Cancelling](https://simulationtheory.ai/ecad5c60-900f-48f9-8a35-0e014f7a8aeb){:target="_blank"}** — Description of what the tool does
-- **[Balancing Chemical Equations](https://simulationtheory.ai/72744361-661d-44d6-ba38-6d266bb83a56){:target="_blank"}** — Description
+- **[Chemistry Unit Cancelling](https://simulationtheory.ai/ecad5c60-900f-48f9-8a35-0e014f7a8aeb){:target="_blank"}** — An interactive tool to help students understand how units interact in mathematical equations found in chemistry.
+- **[Balancing Chemical Equations](https://simulationtheory.ai/72744361-661d-44d6-ba38-6d266bb83a56){:target="_blank"}** — An interative tool to help students become familiar with how to balance chemical equations. 
 
 ## Teaching Philosophy
 
