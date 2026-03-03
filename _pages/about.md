@@ -9,7 +9,7 @@ redirect_from:
 I am a Chemistry educator and researcher with a track record in science communication, curriculum development, and interdisciplinary collaboration. I have contributed to peer-reviewed publications, delivered conference presentations across multiple countries, and led science outreach and grant-funded projects. I am dedicated to evidence-based teaching practice and fostering student success.
 
 Academic Background
-======
+------
 I completed my **PhD in Surface Chemistry** at the University of Sydney (2019), with four months at the Max Planck Institute for Polymer Research in Mainz, Germany. Prior to this, I earned a **Bachelor of Science** (Chemistry & Physics, Honours in Surface Chemistry) from the University of Sydney (2014), including a year in industry at [NICNAS](https://www.industrialchemicals.gov.au/) as a regulatory scientist.
 
 I held an **Associate Postdoctoral** position at the University of Geneva, Switzerland (2019–2021) and a **Marie Skłodowska-Curie Postdoctoral Fellowship** at the University of Bristol, UK (2021–2023) before returning to Sydney.
@@ -17,7 +17,7 @@ I held an **Associate Postdoctoral** position at the University of Geneva, Switz
 Since 2024, I have been at UNSW College as a **Chemistry Education Specialist**, where I lead the first-year university chemistry course as its lecturer, alongside teaching tutorials and demonstrating for laboratory classes.
 
 Research Interests
-======
+------
 My research began in the field of surface chemistry through my PhD at **The University of Sydney**, focusing on the use of Atomic Force Microscopy (AFM) to measure the lubricating properties of nanofilms of oil on smooth surfaces in contact with immiscible liquids.
 
 During my time at the **University of Geneva**, I used AFM to explore the structuring of nanoparticles in aqueous colloidal suspensions at charged interfaces.
