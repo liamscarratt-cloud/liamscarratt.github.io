@@ -23,7 +23,7 @@ repository               : "liamscarratt-cloud/liamscarratt-cloud.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "/images/Liam_Scarratt_Profile.jpg"
+  avatar           : "/images/Liam_Scarratt_Profile.png"
   name             : "Dr Liam R. J. Scarratt"
   pronouns         : "he/him"  
   bio              : "Chemistry Education Specialist at UNSW College. Researcher in AI in Education. Musician and Comedian."
