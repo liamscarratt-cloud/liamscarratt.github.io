@@ -10,7 +10,7 @@ I am a Chemistry educator and researcher with a track record in science communic
 
 Academic Background
 ------
-I completed my **PhD in Surface Chemistry** at the University of Sydney (2019), with four months at the Max Planck Institute for Polymer Research in Mainz, Germany. Prior to this, I earned a **Bachelor of Science** (Chemistry & Physics, Honours in Surface Chemistry) from the University of Sydney (2014), including a year in industry at [NICNAS](https://www.industrialchemicals.gov.au/){:target="_blank"} as a regulatory scientist.
+I completed my **PhD in Surface Chemistry** at the University of Sydney (2019), with four months at the Max Planck Institute for Polymer Research in Mainz, Germany. Prior to this, I earned a **Bachelor of Science** (Chemistry & Physics, Honours in Surface Chemistry) from the University of Sydney (2014), including a year in industry at [NICNAS](https://www.industrialchemicals.gov.au/){:target="_blank"} as a **Regulatory Scientist**.
 
 I held an **Associate Postdoctoral** position at the University of Geneva, Switzerland (2019–2021) and a **Marie Skłodowska-Curie Postdoctoral Fellowship** at the University of Bristol, UK (2021–2023) before returning to Sydney.
 
