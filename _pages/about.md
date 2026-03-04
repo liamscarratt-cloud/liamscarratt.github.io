@@ -28,4 +28,4 @@ Since joining **UNSW College** as a Chemistry Education Specialist, my research 
 
 Beyond Academia
 ------
-Outside of teaching research, I enjoy working on absurdist comedy and music projects, and doing outreach at the intersection of Art and Science. Collaborations I have been involved in include writing and performing alongside **BEAK Comedy** (Sydney), singing bass with the jazz a cappella group **The Acappelicans** (Sydney), and helping organise and run **SciFilmIt Hackathon** events (Geneva, Bristol).
+Outside of teaching and research, I enjoy working on absurdist comedy and music projects, and doing outreach at the intersection of Art and Science. Collaborations I have been involved in include writing and performing alongside **BEAK Comedy** (Sydney), singing bass with the jazz a cappella group **The Acappelicans** (Sydney), and helping organise and run **SciFilmIt Hackathon** events (Geneva, Bristol).
