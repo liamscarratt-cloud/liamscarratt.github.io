@@ -16,15 +16,15 @@ main:
 
   - title: "Teaching"
     url: /teaching/    
-    
-  - title: "Music & Comedy"
+
+  - title: "Creative Projects"
     url: /portfolio/
-        
-  - title: "Tutoring"
-    url: /tutoring/
-    
+
   - title: "CV"
     url: /cv/
     
+  # - title: "Tutoring"
+    # url: /tutoring/
+       
   # - title: "CV"
   #   url: /cv-json/
