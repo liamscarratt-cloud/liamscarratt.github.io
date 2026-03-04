@@ -53,15 +53,23 @@ Liaising with overseas importers and scientific contacts to achieve safety outco
 ## Science Communication, Community and Outreach
 
 **2020, 2021, 2023**: SciFilmIt Hackathon — *Logistics, Mentor, Project Lead*
+
+
 Part of the organisational team for running a SciFilmIt Hackathon in Genève 2020. The objective of the event was to assemble scientists and filmmakers into teams to create short science educational films over 3 intense days, which would then be screened in a cinema to the public. Regular meetings with the committee, organising the venue, food and the flow of the event both before and during. Management of COVID restrictions. Event Mentor in SciFilmIt Lausanne 2021, guiding two teams through the collaboration and science communication process and giving a seminar on science communication. Project Lead for the first event in the UK, SciFilmIt Bristol, acquiring funding, forming a volunteer organising team, and bringing different parts of the University of Bristol together to make the event possible.
 
 **2019–2021**: Postdoctoral Association Université de Genève — *President*
+
+
 Part of the committee for organising a postdoctoral conference day. Assisting in organising key-note speakers, gender balance, sponsors, and developing an online system in case of limitations due to COVID. Improving intercommunication between members via implementing group lunches and promoting written summaries of roles within the association for ease of future transfer.
 
 **2016–2022**: Various Outreach Activities
+
+
 Chemistry Demonstration for Highschool Students, University of Bristol, UK (2022); Presenter at Futures European Researcher's Night, Bristol, UK (2021); Presenter at Science Communication event, Lausanne, Switzerland (2020); Presenter at Nanoscience/Still Life Art Exhibition as part of Science Festival (2018); Interactive booth at the Vice Chancellors Night, The University of Sydney (2016); Presenter at Speed Meet a Scientist, Sydney (2016).
 
 **2015–2018**: Australasian Colloid and Interface Society — *2016 Student Conference Co-chair, Communication Committee Student Rep*
+
+
 Organising multiple aspects of the conference, in particular liaising with committee and group leaders from different universities, running events and social program. Assisting the ACIS, including with its production of the quarterly newsletter.
 
 ## Awards & Scholarships
