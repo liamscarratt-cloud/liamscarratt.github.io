@@ -6,7 +6,7 @@ redirect_from:
   - /about/
   - /about.html
 ---
-I am a chemist and educator with over a decade of experience spanning academic research, international postdoctoral positions, and university teaching. My career has taken me from the nanoscale physics of surfaces — investigating lubrication, wettability, and colloidal forces using atomic force microscopy — to the classroom, where I now lead 1st Year University Chemistry at UNSW College and pursue research in Chemistry Education. I am particularly interested in how evidence-based pedagogy and generative AI tools can be harnessed to improve student preparation, engagement, and conceptual understanding. 
+I am a chemist and educator with over a decade of experience spanning academic research, international postdoctoral positions, and university teaching. My career has taken me from the nanoscale physics of surfaces, investigating lubrication, wettability, and colloidal forces using atomic force microscopy, to the classroom, where I now lead 1st Year University Chemistry at UNSW College and pursue research in Chemistry Education. I am particularly interested in how evidence-based pedagogy and generative AI tools can be harnessed to improve student preparation, engagement, and conceptual understanding. 
 
 Academic Background
 ------
@@ -18,8 +18,8 @@ Since 2024, I have been at UNSW College as a **Leading Education Professional (S
 
 Teaching & Tutoring
 ------
-Teaching sits at the centre of my professional identity. At UNSW College I teach 1st Year University Chemistry, with a focus on making abstract concepts accessible and building student confidence. I am committed to evidence-based, student-centred practice — an approach that directly informs my current education research. Beyond my institutional role, I also offer private tutoring in chemistry with a focus on building scientific reasoning and research thinking in preparation for attending University; see the **Teaching** page for more detail.
+Teaching sits at the centre of my professional identity. At UNSW College I teach 1st Year University Chemistry, with a focus on making abstract concepts accessible and building student confidence. I am committed to evidence-based, student-centred practice, an approach that directly informs my current education research. Beyond my institutional role, I also offer private tutoring in chemistry with a focus on building scientific reasoning and research thinking in preparation for attending University; see the **Teaching** page for more details.
 
 Beyond Academia
 ------
-Outside of teaching and research, I enjoy working on absurdist comedy and music projects, and doing outreach at the intersection of Art and Science. Collaborations I have been involved in include writing and performing alongside [**BEAK Comedy**](https://linktr.ee/beakcomedy){:target="_blank"} (Sydney), singing bass with the jazz a cappella group **The Acappelicans** (Sydney), and helping organise and run [**SciFilmIt Hackathon**](https://scifilmit.com/){:target="_blank"} events (Geneva, Bristol).
+Outside of teaching and research, I enjoy working on absurdist comedy and music projects, and doing outreach at the intersection of Art and Science. Collaborations I have been involved in include writing and performing alongside [**BEAK Comedy**](https://linktr.ee/beakcomedy){:target="_blank"} (Sydney), singing tenor and bass with the jazz a cappella group **The Acappelicans** (Sydney), and helping organise and run [**SciFilmIt Hackathon**](https://scifilmit.com/){:target="_blank"} events (Geneva, Bristol).
