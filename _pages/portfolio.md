@@ -17,7 +17,7 @@ Alongside my work in chemistry and education, I have a long-standing involvement
 
 2022: **Performer** for Unscripted Players improvised theatre show "Second Chances" at Bristol Improv Theatre, UK 
 
-2022: **Co-writer and director** for Australian comedy group BEAK, Edinburgh Fringe show "Cocktail Boys", UK — [comedy.co.uk listing](https://www.comedy.co.uk/fringe/2022/beak/){:target="_blank"} |
+2022: **Co-writer and director** for Australian comedy group BEAK, Edinburgh Fringe show "Cocktail Boys", UK — [comedy.co.uk listing](https://www.comedy.co.uk/fringe/2022/beak/){:target="_blank"} 
 
 2019–2021: **Live musician and technician** for monthly Genève comedy show "Juicebox Comedy", Switzerland
 
