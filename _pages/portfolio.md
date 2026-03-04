@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "Music & Comedy"
+title: "Creative Projects"
 permalink: /portfolio/
 author_profile: true
 ---
