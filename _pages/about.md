@@ -14,7 +14,7 @@ I completed my **PhD in Surface Chemistry** at the University of Sydney (2019), 
 
 I held an **Associate Postdoctoral** position at the University of Geneva, Switzerland (2019–2021) and a **Marie Skłodowska-Curie Postdoctoral Fellowship** at the University of Bristol, UK (2021–2023) before returning to Sydney.
 
-Since 2024, I have been at UNSW College as a **Leading Education Professional (Science)**, where I lead the design, delivery, and coordination of Foundation Studies and Diploma Chemistry, overseeing lectures, tutorials, laboratory sessions, and curriculum development.
+Since 2024, I have been at UNSW College as a **Leading Education Professional (Science)**, where I lead the design, delivery, and coordination the Diploma Chemistry course, overseeing lectures, tutorials, laboratory sessions, and curriculum development.
 
 Teaching & Tutoring
 ------
