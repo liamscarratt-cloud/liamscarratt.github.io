@@ -10,7 +10,7 @@ I currently run the 1st Year University Chemistry course at **UNSW College** as 
 Courses
 ------
 
-**1st Year University Chemistry** — UNSW College (2024–present)
+**1st Year University Chemistry**: UNSW College (2024–present)
 Lectures, tutorials, and laboratory demonstrations.
 
 Interactive Chemistry Education Tools
