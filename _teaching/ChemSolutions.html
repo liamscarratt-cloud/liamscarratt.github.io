@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<title>Chemistry Solutions Lab | Interactive Learning Tool</title>
+<script src="assets/script_7c878f94.js"></script>
+<style>
+    /* ===== CSS Custom Properties for Theming ===== */
+    :root {
+      --color-primary: 147 51 234;
+      --color-secondary: 59 130 246;
+      --color-success: 34 197 94;
+      --color-error: 239 68 68;
+      --color-warning: 245 158 11;
+      
+      --liquid-concentration: rgba(59, 130, 246, 0.8);
+      --liquid-dilution: rgba(220, 38, 38, 0.8);
+      --liquid-dissociation: rgba(16, 185, 129, 0.7);
+      
+      --transition-fast: 150ms ease;
+      --transition-normal: 300ms ease;
+      --transition-slow: 500ms ease-in-out;
+      
+      --safe-area-top: env(safe-area-inset-top, 0px);
+      --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+      --vh: 1vh;
+      
+      --font-scale: 1;
+    }
+
+    /* ===== Base Styles ===== */
+    *, *::before, *::after { box-sizing: border-box; }
+    
+    html {
+      font-size: calc(16px * var(--font-scale));
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Font scaling */
+    [data-font-scale="0.9"] { --font-scale: 0.9; }
+    [data-font-scale="1.0"] { --font-scale: 1; }
+    [data-font-scale="1.1"] { --font-scale: 1.1; }
+    [data-font-scale="1.2"] { --font-scale: 1.2; }
+    [data-font-scale="1.3"] { --font-scale: 1.3; }
+    [data-font-scale="1.4"] { --font-scale: 1.4; }
+
+    /* ===== Accessibility ===== */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+    
+    .sr-only-focusable:focus {
+      position: fixed; top: 0.5rem; left: 0.5rem;
+      width: auto; height: auto; padding: 0.75rem 1rem;
+      margin: 0; overflow: visible; clip: auto;
+      background: white; color: rgb(var(--color-primary));
+      font-weight: 600; border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 9999;
+    }
+
+    :focus-visible {
+      outline: 3px solid rgb(var(--color-primary));
+      outline-offset: 2px;
+    }
+
+    /* High contrast mode */
+    .high-contrast {
+      --color-primary: 0 0 0;
+      --color-secondary: 0 0 0;
+    }
+    .high-contrast body { background: white !important; }
+    .high-contrast .gradient-bg { background: white !important; }
+    .high-contrast * { 
+      border-color: black !important;
+      box-shadow: none !important;
+    }
+
+    /* Reduce motion */
+    .reduce-motion *, 
+    .reduce-motion *::before, 
+    .reduce-motion *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    /* Dyslexia-friendly */
+    .dyslexia-friendly {
+      font-family: 'OpenDyslexic', system-ui, sans-serif;
+      letter-spacing: 0.05em;
+      word-spacing: 0.1em;
+      line-height: 1.8;
+    }
+
+    /* ===== Layout ===== */
+    .full-screen {
+      position: fixed;
+      inset: 0;
+      min-height: calc(var(--vh) * 100);
+      padding-top: var(--safe-area-top);
+      padding-bottom: var(--safe-area-bottom);
+    }
+
+    .hidden { display: none !important; }
+    .modal-open { overflow: hidden; touch-action: none; }
+
+    /* ===== Interactive Elements ===== */
+    button, [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+      touch-action: manipulation;
+      cursor: pointer;
+    }
+
+    input[type="number"],
+    input[type="search"],
+    input[type="text"],
+    select {
+      font-size: 16px; /* Prevents iOS zoom */
+      min-height: 44px;
+    }
+
+    /* ===== Custom Range Slider ===== */
+    .range-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 9999px;
+      outline: none;
+    }
+
+    .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgb(var(--color-primary));
+      cursor: pointer;
+      border: 3px solid white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      transition: transform var(--transition-fast);
+    }
+
+    .range-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+    }
+
+    .range-slider::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgb(var(--color-primary));
+      cursor: pointer;
+      border: 3px solid white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    @media (pointer: coarse) {
+      .range-slider { height: 12px; }
+      .range-slider::-webkit-slider-thumb { width: 32px; height: 32px; }
+      .range-slider::-moz-range-thumb { width: 32px; height: 32px; }
+    }
+
+    /* ===== Beaker & Liquid Animations ===== */
+    .beaker {
+      position: relative;
+      border: 4px solid #9ca3af;
+      border-radius: 0 0 1.5rem 1.5rem;
+      background: linear-gradient(to bottom, transparent, rgba(243, 244, 246, 0.5));
+      overflow: hidden;
+    }
+
+    .liquid {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-radius: 0 0 1.25rem 1.25rem;
+      transition: height var(--transition-slow), background-color var(--transition-normal);
+    }
+
+    .liquid-pattern .liquid::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.2) 0px,
+        rgba(255,255,255,0.2) 6px,
+        rgba(0,0,0,0.1) 6px,
+        rgba(0,0,0,0.1) 12px
+      );
+      mix-blend-mode: overlay;
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    @keyframes bubble-rise {
+      0% { transform: translateY(0) scale(1); opacity: 0.7; }
+      100% { transform: translateY(-30px) scale(0.6); opacity: 0; }
+    }
+
+    .bubble {
+      position: absolute;
+      background: rgba(255,255,255,0.6);
+      border-radius: 50%;
+      animation: bubble-rise 2.5s infinite ease-out;
+    }
+
+    .reduce-motion .bubble { animation: none; opacity: 0.4; }
+
+    /* ===== Feedback States ===== */
+    .feedback-success {
+      background: rgb(var(--color-success) / 0.1);
+      border: 2px solid rgb(var(--color-success));
+      box-shadow: 0 0 20px rgb(var(--color-success) / 0.3);
+    }
+
+    .feedback-error {
+      background: rgb(var(--color-error) / 0.1);
+      border: 2px solid rgb(var(--color-error));
+      box-shadow: 0 0 20px rgb(var(--color-error) / 0.3);
+    }
+
+    /* ===== Toggle Button ===== */
+    .toggle-btn {
+      padding: 0.5rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.5rem;
+      background: white;
+      font-weight: 600;
+      transition: all var(--transition-fast);
+    }
+
+    .toggle-btn[aria-pressed="true"] {
+      border-color: rgb(var(--color-primary));
+      background: rgb(var(--color-primary) / 0.1);
+      box-shadow: 0 0 0 3px rgb(var(--color-primary) / 0.2);
+    }
+
+    .toggle-btn:hover:not(:disabled) {
+      border-color: rgb(var(--color-primary) / 0.5);
+    }
+
+    /* ===== Cards & Panels ===== */
+    .card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+    }
+
+    .gradient-bg {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    }
+
+    /* ===== Badge Styles ===== */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 9999px;
+    }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+    .badge-purple { background: #ede9fe; color: #5b21b6; }
+    .badge-green { background: #dcfce7; color: #166534; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
+    .badge-amber { background: #fef3c7; color: #92400e; }
+
+    /* ===== Progress Indicator ===== */
+    .progress-ring {
+      transform: rotate(-90deg);
+    }
+    .progress-ring__circle {
+      transition: stroke-dashoffset var(--transition-normal);
+      transform-origin: 50% 50%;
+    }
+
+    /* ===== Accordion/Details ===== */
+    details summary {
+      cursor: pointer;
+      list-style: none;
+    }
+    details summary::-webkit-details-marker { display: none; }
+    
+    details .chevron {
+      transition: transform var(--transition-fast);
+    }
+    details[open] .chevron {
+      transform: rotate(90deg);
+    }
+    .reduce-motion details .chevron { transition: none; }
+  </style>
+<script>
+                window.load_data_from_csv = (filename) => {
+                    // Implementation needed when code is downloaded
+                };
+
+                window.save_data_to_csv = (filename, data) => {
+                    // Implementation needed when code is downloaded
+                };
+
+                window.call_llm = (system_prompt, user_messages, json_fields) => {
+                    // Implementation needed when code is downloaded
+                };
+            </script></head>
+<body class="bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 min-h-screen">
+<!-- Skip Link -->
+<a class="sr-only sr-only-focusable" href="#main-controls">
+    Skip to main controls
+  </a>
+<!-- Live Region for Screen Reader Announcements -->
+<div aria-atomic="true" aria-live="polite" class="sr-only" id="announcer" role="status"></div>
+<!-- ===== START SCREEN ===== -->
+<section aria-label="Welcome screen" class="full-screen gradient-bg flex items-center justify-center z-50" id="start-screen" role="region">
+<div class="text-center text-white p-6 max-w-lg">
+<div aria-label="Laboratory flask" class="text-6xl mb-4" role="img">⚗️</div>
+<h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3">
+        Chemistry Solutions Lab
+      </h1>
+<p class="text-lg sm:text-xl opacity-90 mb-8">
+        Master concentration, dilution, and ionic dissociation through interactive experiments.
+      </p>
+<button aria-describedby="start-hint" class="bg-white text-purple-700 px-8 py-4 rounded-full text-xl font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200" id="btn-start">
+        Enter Laboratory
+      </button>
+<p class="text-sm mt-4 opacity-75" id="start-hint">Press Enter or click to begin</p>
+</div>
+</section>
+<!-- ===== MODE SELECTION SCREEN ===== -->
+<section aria-label="Experiment selection" class="full-screen gradient-bg hidden items-center justify-center z-40" id="mode-screen" role="region">
+<div class="text-center text-white p-4 sm:p-8 max-w-5xl w-full">
+<h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">Choose Your Experiment</h2>
+<div aria-label="Available experiment modes" class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6" role="list">
+<!-- Concentration Mode -->
+<button class="mode-card bg-gradient-to-br from-blue-500 to-blue-700 p-6 sm:p-8 rounded-2xl text-left transform hover:scale-[1.02] transition-all duration-200 shadow-xl" data-mode="concentration" role="listitem">
+<div aria-hidden="true" class="text-5xl mb-3">⚗️</div>
+<h3 class="text-xl sm:text-2xl font-bold mb-2">Concentration Lab</h3>
+<p class="text-blue-100 text-sm sm:text-base mb-3">Mix solutions to achieve target concentrations</p>
+<div class="bg-white/20 rounded-lg px-3 py-2 inline-block">
+<span class="text-sm font-mono">C = n / V</span>
+</div>
+</button>
+<!-- Dilution Mode -->
+<button class="mode-card bg-gradient-to-br from-purple-500 to-purple-700 p-6 sm:p-8 rounded-2xl text-left transform hover:scale-[1.02] transition-all duration-200 shadow-xl" data-mode="dilution" role="listitem">
+<div aria-hidden="true" class="text-5xl mb-3">🧪</div>
+<h3 class="text-xl sm:text-2xl font-bold mb-2">Dilution Lab</h3>
+<p class="text-purple-100 text-sm sm:text-base mb-3">Dilute stock solutions to target concentrations</p>
+<div class="bg-white/20 rounded-lg px-3 py-2 inline-block">
+<span class="text-sm font-mono">C₁V₁ = C₂V₂</span>
+</div>
+</button>
+<!-- Dissociation Mode -->
+<button class="mode-card bg-gradient-to-br from-emerald-500 to-teal-600 p-6 sm:p-8 rounded-2xl text-left transform hover:scale-[1.02] transition-all duration-200 shadow-xl" data-mode="dissociation" role="listitem">
+<div aria-hidden="true" class="text-5xl mb-3">🔬</div>
+<h3 class="text-xl sm:text-2xl font-bold mb-2">Dissociation Lab</h3>
+<p class="text-emerald-100 text-sm sm:text-base mb-3">Explore ion concentrations from ionic compounds</p>
+<div class="bg-white/20 rounded-lg px-3 py-2 inline-block">
+<span class="text-sm font-mono">NaCl → Na⁺ + Cl⁻</span>
+</div>
+</button>
+</div>
+<button class="mt-6 text-white/80 hover:text-white underline transition-colors" id="btn-back-start">
+        ← Back to Start
+      </button>
+</div>
+</section>
+<!-- ===== MAIN GAME CONTAINER ===== -->
+<main class="hidden container mx-auto px-4 py-6 max-w-6xl" id="game-container">
+<!-- Header -->
+<header class="text-center mb-6">
+<h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-3" id="mode-title">
+        Chemistry Solutions Lab
+      </h1>
+<!-- Stats Bar -->
+<div class="flex flex-wrap justify-center gap-3 text-sm">
+<div class="card px-4 py-2 flex items-center gap-2">
+<span class="text-gray-600">Mode:</span>
+<span class="font-semibold badge badge-blue" id="stat-mode">Concentration</span>
+</div>
+<div class="card px-4 py-2 flex items-center gap-2">
+<span class="text-gray-600">Level:</span>
+<span class="font-bold text-purple-600" id="stat-level">1</span>
+</div>
+<div class="card px-4 py-2 flex items-center gap-2">
+<span class="text-gray-600">Score:</span>
+<span class="font-bold text-blue-600" id="stat-score">0</span>
+</div>
+<div class="card px-4 py-2 flex items-center gap-2">
+<span class="text-gray-600">Streak:</span>
+<span class="font-bold text-green-600" id="stat-streak">🔥 0</span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="mt-4 flex justify-center gap-3">
+<button class="toggle-btn text-sm" id="btn-change-mode">
+          Change Mode
+        </button>
+<button class="toggle-btn text-sm bg-purple-600 text-white border-purple-600" id="btn-targets">
+          📋 Browse Targets
+        </button>
+</div>
+</header>
+<!-- Learning Preferences Panel -->
+<details class="card mb-6" id="preferences-panel">
+<summary class="flex items-center justify-between p-4 font-semibold text-gray-800">
+<span class="flex items-center gap-2">
+<span aria-hidden="true">⚙️</span>
+          Learning Preferences
+        </span>
+<span aria-hidden="true" class="chevron text-gray-500">▶</span>
+</summary>
+<div class="p-4 pt-0 border-t border-gray-100">
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+<!-- Text Size -->
+<div class="flex items-center gap-2">
+<span class="text-sm text-gray-600">Text:</span>
+<button aria-label="Decrease text size" class="toggle-btn text-sm px-3" id="btn-text-smaller">A−</button>
+<button aria-label="Increase text size" class="toggle-btn text-sm px-3" id="btn-text-larger">A+</button>
+</div>
+<button aria-pressed="false" class="toggle-btn text-sm" id="btn-high-contrast">
+            High Contrast
+          </button>
+<button aria-pressed="false" class="toggle-btn text-sm" id="btn-reduce-motion">
+            Reduce Motion
+          </button>
+<button aria-pressed="false" class="toggle-btn text-sm" id="btn-pattern">
+            Pattern Fill
+          </button>
+<button aria-pressed="false" class="toggle-btn text-sm" id="btn-dyslexia">
+            Dyslexia Font
+          </button>
+<button aria-pressed="false" class="toggle-btn text-sm" id="btn-guided">
+            Guided Mode
+          </button>
+<button aria-pressed="true" class="toggle-btn text-sm" id="btn-show-working">
+            Show Working
+          </button>
+<!-- Input Mode -->
+<div class="flex items-center gap-2">
+<span class="text-sm text-gray-600">Input:</span>
+<button aria-pressed="true" class="toggle-btn text-sm px-3" id="btn-input-slider">Sliders</button>
+<button aria-pressed="false" class="toggle-btn text-sm px-3" id="btn-input-number">Numbers</button>
+</div>
+</div>
+</div>
+</details>
+<!-- Mission Panel -->
+<section aria-labelledby="mission-title" class="card p-4 sm:p-6 mb-6">
+<h2 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2" id="mission-title">
+<span aria-hidden="true">🎯</span>
+        Mission Objective
+      </h2>
+<p class="text-gray-700 mb-3" id="mission-text">
+        Create a solution with the target concentration!
+      </p>
+<div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg">
+<p class="text-sm text-gray-700 font-medium" id="formula-display">
+<strong>Formula:</strong> Concentration (M) = Moles of Solute / Volume of Solution (L)
+        </p>
+<div class="text-sm text-gray-600 mt-2 font-mono" id="working-display"></div>
+</div>
+</section>
+<!-- Target Display -->
+<section aria-labelledby="target-title" class="gradient-bg text-white rounded-2xl p-6 mb-6 text-center">
+<h3 class="text-lg font-semibold mb-1 opacity-90" id="target-title">Target Concentration</h3>
+<div class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2" id="target-value">0.50 M</div>
+<div class="text-sm opacity-80" id="target-compound">Sodium Chloride (NaCl)</div>
+<div class="text-xs mt-2 opacity-70 italic" id="target-context"></div>
+</section>
+<!-- ===== CONCENTRATION INTERFACE ===== -->
+<section class="grid lg:grid-cols-2 gap-6 mb-6" id="interface-concentration">
+<!-- Controls -->
+<div aria-labelledby="controls-title" class="card p-4 sm:p-6" id="main-controls" role="region">
+<h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2" id="controls-title">
+<span aria-hidden="true">🧪</span>
+          Mix Your Solution
+        </h3>
+<!-- Slider Controls -->
+<div class="space-y-6" id="controls-slider">
+<div>
+<label class="flex justify-between text-sm font-medium text-gray-700 mb-2" for="slider-solute">
+<span>Solute Amount</span>
+<span class="text-purple-600 font-bold"><span id="value-solute">0.50</span> moles</span>
+</label>
+<input aria-describedby="hint-solute" class="range-slider" id="slider-solute" max="2" min="0" step="0.01" type="range" value="0.5"/>
+<div class="flex justify-between text-xs text-gray-500 mt-1" id="hint-solute">
+<span>0 mol</span>
+<span>2 mol</span>
+</div>
+</div>
+<div>
+<label class="flex justify-between text-sm font-medium text-gray-700 mb-2" for="slider-volume">
+<span>Solution Volume</span>
+<span class="text-blue-600 font-bold"><span id="value-volume">1.00</span> L</span>
+</label>
+<input aria-describedby="hint-volume" class="range-slider" id="slider-volume" max="2" min="0.1" step="0.01" type="range" value="1"/>
+<div class="flex justify-between text-xs text-gray-500 mt-1" id="hint-volume">
+<span>0.1 L</span>
+<span>2.0 L</span>
+</div>
+</div>
+</div>
+<!-- Number Controls (hidden by default) -->
+<div class="hidden space-y-4" id="controls-number">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="input-solute">
+              Solute Amount (moles)
+            </label>
+<div class="flex gap-2">
+<input class="flex-1 border-2 border-gray-200 rounded-lg px-4 py-2 focus:border-purple-500" id="input-solute" inputmode="decimal" max="2" min="0" step="0.01" type="number" value="0.50"/>
+<button aria-label="Decrease solute" class="toggle-btn px-4" id="btn-solute-minus">−</button>
+<button aria-label="Increase solute" class="toggle-btn px-4" id="btn-solute-plus">+</button>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1" for="input-volume">
+              Solution Volume (L)
+            </label>
+<div class="flex gap-2">
+<input class="flex-1 border-2 border-gray-200 rounded-lg px-4 py-2 focus:border-blue-500" id="input-volume" inputmode="decimal" max="2" min="0.1" step="0.01" type="number" value="1.00"/>
+<button aria-label="Decrease volume" class="toggle-btn px-4" id="btn-volume-minus">−</button>
+<button aria-label="Increase volume" class="toggle-btn px-4" id="btn-volume-plus">+</button>
+</div>
+</div>
+</div>
+<!-- Current Result -->
+<div class="bg-gray-50 rounded-xl p-4 mt-6 mb-4">
+<div class="text-sm font-medium text-gray-600 mb-1">Your Concentration:</div>
+<div class="text-3xl font-bold text-gray-800" id="current-concentration">0.50 M</div>
+<div class="text-sm text-gray-500 mt-1 hidden" id="concentration-hint"></div>
+</div>
+<!-- Action Buttons -->
+<div class="flex gap-3">
+<button class="flex-1 gradient-bg text-white py-3 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all" id="btn-check">
+            ✓ Check Answer
+          </button>
+<button class="toggle-btn py-3 px-6" id="btn-reset">
+            Reset
+          </button>
+</div>
+</div>
+<!-- Beaker Visualization -->
+<div class="card p-4 sm:p-6 flex items-center justify-center">
+<figure class="text-center">
+<div class="relative">
+<!-- Beaker -->
+<div class="beaker w-40 sm:w-48 h-56 sm:h-64 mx-auto">
+<!-- Graduation marks -->
+<div class="absolute left-2 top-[15%] text-xs text-gray-500">2.0 L</div>
+<div class="absolute left-2 top-[40%] text-xs text-gray-500">1.5 L</div>
+<div class="absolute left-2 top-[65%] text-xs text-gray-500">1.0 L</div>
+<div class="absolute left-2 top-[90%] text-xs text-gray-500">0.5 L</div>
+<!-- Liquid -->
+<div class="liquid" id="liquid-concentration" style="height: 50%; background: linear-gradient(to top, rgba(59,130,246,0.8), rgba(147,51,234,0.6));">
+<div class="bubble" style="left: 15%; bottom: 10%; width: 8px; height: 8px;"></div>
+<div class="bubble" style="right: 20%; bottom: 20%; width: 5px; height: 5px; animation-delay: 0.5s;"></div>
+<div class="bubble" style="left: 45%; bottom: 15%; width: 6px; height: 6px; animation-delay: 1s;"></div>
+</div>
+<!-- Label -->
+<div class="absolute bottom-2 left-0 right-0 text-center">
+<span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-700 shadow" id="beaker-label">
+                  0.50 M
+                </span>
+</div>
+</div>
+<!-- Base -->
+<div class="w-40 sm:w-48 h-2 bg-gray-400 rounded-full mt-1 mx-auto"></div>
+</div>
+<figcaption class="text-sm text-gray-600 mt-3">Volumetric Flask</figcaption>
+</figure>
+</div>
+</section>
+<!-- ===== DILUTION INTERFACE ===== -->
+<section class="hidden mb-6" id="interface-dilution">
+<div class="grid md:grid-cols-3 gap-4 sm:gap-6 mb-6">
+<!-- Stock Solution -->
+<div class="card p-4 sm:p-6 text-center">
+<h3 class="text-lg font-bold text-gray-800 mb-4">Stock Solution</h3>
+<div class="beaker w-28 sm:w-32 h-44 sm:h-48 mx-auto mb-4">
+<div class="liquid" id="liquid-stock" style="height: 80%; background: linear-gradient(to top, rgba(220,38,38,0.9), rgba(239,68,68,0.7));">
+<div class="bubble" style="left: 20%; bottom: 15%; width: 6px; height: 6px;"></div>
+</div>
+<div class="absolute bottom-2 left-0 right-0 text-center">
+<span class="bg-white/90 px-2 py-0.5 rounded text-xs font-bold" id="stock-label">2.00 M</span>
+</div>
+</div>
+<div class="w-28 sm:w-32 h-1 bg-gray-400 rounded-full mx-auto mb-4"></div>
+<div class="text-sm text-gray-600">Concentration (C₁)</div>
+<div class="text-2xl font-bold text-red-600" id="c1-display">2.00 M</div>
+<div class="mt-4">
+<label class="text-sm text-gray-600 block mb-2" for="slider-v1">Volume to Transfer (V₁)</label>
+<input class="range-slider" id="slider-v1" max="500" min="0" step="1" type="range" value="250"/>
+<div class="text-lg font-bold text-red-600 mt-1" id="v1-display">250 mL</div>
+</div>
+</div>
+<!-- Transfer Arrow -->
+<div class="flex items-center justify-center">
+<div class="text-center">
+<div aria-hidden="true" class="text-4xl mb-2">→</div>
+<button class="gradient-bg text-white px-4 py-2 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all" id="btn-transfer">
+              Transfer &amp; Dilute
+            </button>
+</div>
+</div>
+<!-- Final Solution -->
+<div class="card p-4 sm:p-6 text-center">
+<h3 class="text-lg font-bold text-gray-800 mb-4">Final Solution</h3>
+<div class="beaker w-28 sm:w-32 h-44 sm:h-48 mx-auto mb-4">
+<div class="liquid" id="liquid-final" style="height: 50%; background: linear-gradient(to top, rgba(59,130,246,0.6), rgba(147,51,234,0.4));">
+<div class="bubble" style="left: 30%; bottom: 10%; width: 5px; height: 5px;"></div>
+</div>
+<div class="absolute bottom-2 left-0 right-0 text-center">
+<span class="bg-white/90 px-2 py-0.5 rounded text-xs font-bold" id="final-label">0.00 M</span>
+</div>
+</div>
+<div class="w-28 sm:w-32 h-1 bg-gray-400 rounded-full mx-auto mb-4"></div>
+<div class="mt-4">
+<label class="text-sm text-gray-600 block mb-2" for="slider-v2">Target Volume (V₂)</label>
+<input class="range-slider" id="slider-v2" max="1000" min="100" step="10" type="range" value="500"/>
+<div class="text-lg font-bold text-blue-600 mt-1" id="v2-display">500 mL</div>
+</div>
+<div class="text-sm text-gray-600 mt-3">Final Concentration (C₂)</div>
+<div class="text-2xl font-bold text-purple-600" id="c2-display">0.00 M</div>
+</div>
+</div>
+<!-- Calculation Panel -->
+<div class="card p-4 sm:p-6 mb-6">
+<h3 class="text-lg font-bold text-gray-800 mb-4">Dilution Calculation</h3>
+<div class="grid md:grid-cols-2 gap-4">
+<div class="bg-gray-50 rounded-xl p-4">
+<div class="text-sm font-semibold text-gray-600 mb-2">Using C₁V₁ = C₂V₂</div>
+<div class="text-lg font-mono">
+              (<span class="text-red-600" id="calc-c1">2.00</span> M) × 
+              (<span class="text-red-600" id="calc-v1">250</span> mL) = 
+              (<span class="text-purple-600" id="calc-c2">?</span> M) × 
+              (<span class="text-blue-600" id="calc-v2">500</span> mL)
+            </div>
+<div class="text-sm text-gray-600 mt-2 font-mono" id="dilution-working"></div>
+</div>
+<div class="bg-purple-50 rounded-xl p-4 flex flex-col justify-center">
+<div class="text-sm font-semibold text-purple-800 mb-1">Predicted C₂:</div>
+<div class="text-3xl font-bold text-purple-600" id="predicted-c2">1.00 M</div>
+</div>
+</div>
+<div class="flex gap-3 mt-4">
+<button class="flex-1 gradient-bg text-white py-3 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all" id="btn-check-dilution">
+            ✓ Check Solution
+          </button>
+<button class="toggle-btn py-3 px-6" id="btn-reset-dilution">
+            Reset
+          </button>
+</div>
+</div>
+</section>
+<!-- ===== DISSOCIATION INTERFACE ===== -->
+<section class="hidden mb-6" id="interface-dissociation">
+<div class="grid lg:grid-cols-2 gap-6">
+<!-- Controls -->
+<div class="card p-4 sm:p-6">
+<h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+<span aria-hidden="true">🔬</span>
+            Ionic Dissociation
+          </h3>
+<div class="grid sm:grid-cols-2 gap-4 mb-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2" for="select-salt">
+                Select Ionic Compound
+              </label>
+<select class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:border-emerald-500" id="select-salt">
+<!-- Options populated by JS -->
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2" for="slider-salt-conc">
+                Salt Concentration: <span class="text-emerald-600 font-bold" id="value-salt-conc">1.00</span> M
+              </label>
+<input class="range-slider" id="slider-salt-conc" max="3" min="0" step="0.01" type="range" value="1"/>
+</div>
+</div>
+<!-- Dissociation Equation -->
+<div class="bg-gray-50 rounded-xl p-4 mb-4">
+<div class="text-sm font-semibold text-gray-600 mb-1">Dissociation Equation:</div>
+<div class="text-lg font-medium text-gray-800" id="diss-equation">
+              NaCl(aq) → Na⁺(aq) + Cl⁻(aq)
+            </div>
+</div>
+<!-- Ion Concentrations -->
+<div class="bg-emerald-50 rounded-xl p-4">
+<div class="text-sm font-semibold text-emerald-800 mb-3">Ion Concentrations:</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="ion-grid">
+<!-- Ion cards populated by JS -->
+</div>
+<div class="mt-4 pt-4 border-t border-emerald-200">
+<div class="text-sm text-emerald-800">
+<strong>Ionic Strength (I):</strong>
+<span class="font-bold" id="ionic-strength">0.00</span> M
+              </div>
+<div class="text-sm text-emerald-700 mt-2 font-mono" id="diss-working"></div>
+</div>
+</div>
+<button class="toggle-btn py-3 px-6 mt-4 w-full" id="btn-reset-diss">
+            Reset
+          </button>
+</div>
+<!-- Beaker Visualization -->
+<div class="card p-4 sm:p-6 flex items-center justify-center">
+<figure class="text-center">
+<div class="beaker w-40 sm:w-48 h-56 sm:h-64 mx-auto">
+<div class="absolute left-2 top-[15%] text-xs text-gray-500">2.0 L</div>
+<div class="absolute left-2 top-[40%] text-xs text-gray-500">1.5 L</div>
+<div class="absolute left-2 top-[65%] text-xs text-gray-500">1.0 L</div>
+<div class="absolute left-2 top-[90%] text-xs text-gray-500">0.5 L</div>
+<div class="liquid" id="liquid-diss" style="height: 50%; background: linear-gradient(to top, rgba(16,185,129,0.7), rgba(20,184,166,0.5));">
+<div class="bubble" style="left: 15%; bottom: 10%; width: 8px; height: 8px;"></div>
+<div class="bubble" style="right: 20%; bottom: 20%; width: 5px; height: 5px; animation-delay: 0.5s;"></div>
+</div>
+<div class="absolute bottom-2 left-0 right-0 text-center">
+<span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-bold text-gray-700 shadow" id="diss-beaker-label">
+                  Σ ions: 2.00 M
+                </span>
+</div>
+</div>
+<div class="w-40 sm:w-48 h-2 bg-gray-400 rounded-full mt-1 mx-auto"></div>
+<figcaption class="text-sm text-gray-600 mt-3">Aqueous Solution</figcaption>
+</figure>
+</div>
+</div>
+<!-- Info Box -->
+<div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mt-6">
+<h4 class="font-bold text-blue-900 mb-2">📚 Key Concepts</h4>
+<ul class="text-sm text-blue-800 space-y-1">
+<li>• Strong electrolytes dissociate completely in water</li>
+<li>• Ion concentration = stoichiometric coefficient × salt concentration</li>
+<li>• Ionic strength: I = ½ × Σ(cᵢ × zᵢ²), where z is ion charge</li>
+</ul>
+</div>
+</section>
+<!-- ===== FEEDBACK PANEL ===== -->
+<section aria-live="assertive" class="card p-6 mb-6 hidden" id="feedback-panel" role="alert">
+<div class="text-center" id="feedback-content"></div>
+</section>
+<!-- ===== TIPS PANEL ===== -->
+<aside class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+<h3 class="font-bold text-blue-900 mb-2 flex items-center gap-2">
+<span aria-hidden="true">💡</span>
+        Quick Tips
+      </h3>
+<ul class="text-sm text-blue-800 space-y-1" id="tips-content">
+<li>• Increase solute or decrease volume to increase concentration</li>
+<li>• Decrease solute or increase volume to decrease concentration</li>
+<li>• Use keyboard arrows for fine adjustments</li>
+<li>• Perfect matches earn bonus points!</li>
+</ul>
+</aside>
+</main>
+<!-- ===== TARGETS MODAL ===== -->
+<div aria-labelledby="targets-modal-title" aria-modal="true" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4" id="modal-targets" role="dialog">
+<div class="card p-4 sm:p-6 max-w-4xl w-full max-h-[85vh] overflow-hidden flex flex-col">
+<header class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-bold text-gray-800" id="targets-modal-title">Browse Targets</h2>
+<button aria-label="Close" class="toggle-btn" id="btn-close-targets">✕</button>
+</header>
+<div class="flex flex-wrap gap-3 mb-4">
+<span class="badge badge-blue" id="targets-mode-badge">Concentration</span>
+<input class="flex-1 min-w-[200px] border-2 border-gray-200 rounded-lg px-4 py-2" id="input-targets-search" placeholder="Search compounds..." type="search"/>
+<select class="border-2 border-gray-200 rounded-lg px-4 py-2" id="select-targets-category">
+<option value="all">All Categories</option>
+<option value="acids">Acids</option>
+<option value="bases">Bases</option>
+<option value="electrolytes">Electrolytes</option>
+<option value="redox">Redox</option>
+<option value="bio">Bio/Physio</option>
+<option value="general">General</option>
+</select>
+</div>
+<div class="grid sm:grid-cols-2 gap-3 overflow-y-auto flex-1" id="targets-list"></div>
+</div>
+</div>
+<!-- ===== SUCCESS MODAL ===== -->
+<div aria-labelledby="success-modal-title" aria-modal="true" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4" id="modal-success" role="dialog">
+<div class="card p-6 sm:p-8 max-w-md w-full text-center">
+<div aria-hidden="true" class="text-6xl mb-4">🎉</div>
+<h2 class="text-2xl font-bold text-green-600 mb-2" id="success-modal-title">Excellent Work!</h2>
+<p class="text-gray-700 mb-4" id="success-message">You've mastered this challenge!</p>
+<div class="bg-green-50 rounded-xl p-4 mb-6">
+<p class="text-sm text-green-800" id="success-details"></p>
+</div>
+<button class="w-full gradient-bg text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all" id="btn-next-level">
+        Next Challenge →
+      </button>
+</div>
+</div>
+<script>
+  (() => {
+    'use strict';
+
+    // ===== CONSTANTS =====
+    const CONSTANTS = {
+      SOLUTE_MIN: 0,
+      SOLUTE_MAX: 2,
+      VOLUME_MIN: 0.1,
+      VOLUME_MAX: 2,
+      V1_MAX: 500,
+      V2_MIN: 100,
+      V2_MAX: 1000,
+      SALT_CONC_MAX: 3,
+      TOLERANCE_EASY: 0.05,
+      TOLERANCE_NORMAL: 0.03,
+      TOLERANCE_HARD: 0.02,
+      SCORE_CONCENTRATION: 100,
+      SCORE_DILUTION: 120,
+      STREAK_BONUS: 10,
+      DEBOUNCE_MS: 16
+    };
+
+    // ===== DATA =====
+    const COMPOUNDS = [
+      'Sodium Chloride (NaCl)', 'Glucose (C₆H₁₂O₆)', 'Potassium Nitrate (KNO₃)',
+      'Copper(II) Sulfate (CuSO₄)', 'Calcium Chloride (CaCl₂)', 'Magnesium Sulfate (MgSO₄)',
+      'Hydrochloric Acid (HCl)', 'Sodium Hydroxide (NaOH)', 'Acetic Acid (CH₃COOH)', 'Ammonia (NH₃)'
+    ];
+
+    const CONCENTRATION_CHALLENGES = [
+      { id: 'c01', category: 'electrolytes', compound: 'Sodium Chloride (NaCl)', target: 0.10, context: 'Conductivity baseline' },
+      { id: 'c02', category: 'redox', compound: 'Copper(II) Sulfate (CuSO₄)', target: 0.25, context: 'Colorimetry calibration' },
+      { id: 'c03', category: 'electrolytes', compound: 'Potassium Nitrate (KNO₃)', target: 0.50, context: 'Supporting electrolyte' },
+      { id: 'c04', category: 'acids', compound: 'Hydrochloric Acid (HCl)', target: 1.00, context: 'Titration standard' },
+      { id: 'c05', category: 'acids', compound: 'Acetic Acid (CH₃COOH)', target: 0.20, context: 'Buffer component' },
+      { id: 'c06', category: 'bases', compound: 'Sodium Hydroxide (NaOH)', target: 0.50, context: 'Base titration' },
+      { id: 'c07', category: 'general', compound: 'Glucose (C₆H₁₂O₆)', target: 0.20, context: 'Colligative properties' },
+      { id: 'c08', category: 'bio', compound: 'Sodium Chloride (NaCl)', target: 0.154, context: 'Isotonic saline' },
+      { id: 'c09', category: 'redox', compound: 'Silver Nitrate (AgNO₃)', target: 0.010, context: 'Precipitation titration' },
+      { id: 'c10', category: 'redox', compound: 'Potassium Permanganate (KMnO₄)', target: 0.005, context: 'Redox indicator' }
+    ];
+
+    const DILUTION_CHALLENGES = [
+      { id: 'd01', category: 'bio', compound: 'Sodium Chloride (NaCl)', c1: 2.00, target: 0.154, v2: 250, context: 'Isotonic saline preparation' },
+      { id: 'd02', category: 'acids', compound: 'Hydrochloric Acid (HCl)', c1: 1.00, target: 0.100, v2: 500, context: 'Titration acid' },
+      { id: 'd03', category: 'bases', compound: 'Sodium Hydroxide (NaOH)', c1: 0.50, target: 0.100, v2: 250, context: 'Standardized base' },
+      { id: 'd04', category: 'redox', compound: 'Copper(II) Sulfate (CuSO₄)', c1: 1.50, target: 0.250, v2: 200, context: 'Calibration point' },
+      { id: 'd05', category: 'electrolytes', compound: 'Potassium Nitrate (KNO₃)', c1: 3.00, target: 1.00, v2: 300, context: 'Ionic strength control' },
+      { id: 'd06', category: 'general', compound: 'Glucose (C₆H₁₂O₆)', c1: 2.50, target: 0.500, v2: 400, context: 'Non-electrolyte dilution' }
+    ];
+
+    const SALTS = [
+      { id: 'nacl', name: 'Sodium chloride', formula: 'NaCl', ions: [{ sym: 'Na⁺', z: 1, n: 1 }, { sym: 'Cl⁻', z: -1, n: 1 }] },
+      { id: 'k2so4', name: 'Potassium sulfate', formula: 'K₂SO₄', ions: [{ sym: 'K⁺', z: 1, n: 2 }, { sym: 'SO₄²⁻', z: -2, n: 1 }] },
+      { id: 'cacl2', name: 'Calcium chloride', formula: 'CaCl₂', ions: [{ sym: 'Ca²⁺', z: 2, n: 1 }, { sym: 'Cl⁻', z: -1, n: 2 }] },
+      { id: 'mgno32', name: 'Magnesium nitrate', formula: 'Mg(NO₃)₂', ions: [{ sym: 'Mg²⁺', z: 2, n: 1 }, { sym: 'NO₃⁻', z: -1, n: 2 }] },
+      { id: 'al2so43', name: 'Aluminium sulfate', formula: 'Al₂(SO₄)₃', ions: [{ sym: 'Al³⁺', z: 3, n: 2 }, { sym: 'SO₄²⁻', z: -2, n: 3 }] },
+      { id: 'nh4cl', name: 'Ammonium chloride', formula: 'NH₄Cl', ions: [{ sym: 'NH₄⁺', z: 1, n: 1 }, { sym: 'Cl⁻', z: -1, n: 1 }] },
+      { id: 'baoh2', name: 'Barium hydroxide', formula: 'Ba(OH)₂', ions: [{ sym: 'Ba²⁺', z: 2, n: 1 }, { sym: 'OH⁻', z: -1, n: 2 }] },
+      { id: 'na2co3', name: 'Sodium carbonate', formula: 'Na₂CO₃', ions: [{ sym: 'Na⁺', z: 1, n: 2 }, { sym: 'CO₃²⁻', z: -2, n: 1 }] },
+      { id: 'fecl3', name: 'Iron(III) chloride', formula: 'FeCl₃', ions: [{ sym: 'Fe³⁺', z: 3, n: 1 }, { sym: 'Cl⁻', z: -1, n: 3 }] }
+    ];
+
+    // ===== UTILITIES =====
+    const $ = (id) => document.getElementById(id);
+    const $$ = (sel) => document.querySelectorAll(sel);
+    
+    const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
+    const formatM = (x) => x < 0.1 ? x.toFixed(3) : x.toFixed(2);
+    const randomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    
+    const debounce = (fn, ms) => {
+      let timeoutId;
+      return (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => fn(...args), ms);
+      };
+    };
+
+    const announce = (message) => {
+      const announcer = $('announcer');
+      announcer.textContent = '';
+      setTimeout(() => { announcer.textContent = message; }, 100);
+    };
+
+    // ===== STATE MANAGEMENT =====
+    const createStore = (initialState) => {
+      let state = { ...initialState };
+      const listeners = new Set();
+      
+      return {
+        get: () => state,
+        set: (updates) => {
+          state = { ...state, ...updates };
+          listeners.forEach(fn => fn(state));
+        },
+        subscribe: (fn) => {
+          listeners.add(fn);
+          return () => listeners.delete(fn);
+        }
+      };
+    };
+
+    const gameStore = createStore({
+      mode: 'concentration',
+      level: 1,
+      score: 0,
+      streak: 0,
+      target: { concentration: 0.5, compound: 'Sodium Chloride (NaCl)', context: '' },
+      // Concentration
+      solute: 0.5,
+      volume: 1.0,
+      // Dilution
+      c1: 2.0,
+      v1: 250,
+      v2: 500,
+      targetC2: 1.0,
+      // Dissociation
+      saltId: 'nacl',
+      saltConc: 1.0
+    });
+
+    const prefsStore = createStore({
+      fontScale: '1.0',
+      highContrast: false,
+      reduceMotion: false,
+      pattern: false,
+      dyslexia: false,
+      guided: false,
+      showWorking: true,
+      inputMode: 'slider'
+    });
+
+    // Load saved preferences
+    try {
+      const saved = JSON.parse(localStorage.getItem('chemLabPrefs'));
+      if (saved) prefsStore.set(saved);
+    } catch (e) {}
+
+    // Save preferences on change
+    prefsStore.subscribe((prefs) => {
+      localStorage.setItem('chemLabPrefs', JSON.stringify(prefs));
+      applyPreferences(prefs);
+    });
+
+    // ===== DOM REFERENCES =====
+    const els = {
+      // Screens
+      startScreen: $('start-screen'),
+      modeScreen: $('mode-screen'),
+      gameContainer: $('game-container'),
+      
+      // Interfaces
+      interfaceConcentration: $('interface-concentration'),
+      interfaceDilution: $('interface-dilution'),
+      interfaceDissociation: $('interface-dissociation'),
+      
+      // Stats
+      statMode: $('stat-mode'),
+      statLevel: $('stat-level'),
+      statScore: $('stat-score'),
+      statStreak: $('stat-streak'),
+      
+      // Target display
+      targetTitle: $('target-title'),
+      targetValue: $('target-value'),
+      targetCompound: $('target-compound'),
+      targetContext: $('target-context'),
+      missionText: $('mission-text'),
+      formulaDisplay: $('formula-display'),
+      workingDisplay: $('working-display'),
+      
+      // Concentration controls
+      sliderSolute: $('slider-solute'),
+      sliderVolume: $('slider-volume'),
+      valueSolute: $('value-solute'),
+      valueVolume: $('value-volume'),
+      inputSolute: $('input-solute'),
+      inputVolume: $('input-volume'),
+      currentConcentration: $('current-concentration'),
+      concentrationHint: $('concentration-hint'),
+      beakerLabel: $('beaker-label'),
+      liquidConcentration: $('liquid-concentration'),
+      controlsSlider: $('controls-slider'),
+      controlsNumber: $('controls-number'),
+      
+      // Dilution controls
+      sliderV1: $('slider-v1'),
+      sliderV2: $('slider-v2'),
+      v1Display: $('v1-display'),
+      v2Display: $('v2-display'),
+      c1Display: $('c1-display'),
+      c2Display: $('c2-display'),
+      stockLabel: $('stock-label'),
+      finalLabel: $('final-label'),
+      liquidStock: $('liquid-stock'),
+      liquidFinal: $('liquid-final'),
+      calcC1: $('calc-c1'),
+      calcV1: $('calc-v1'),
+      calcC2: $('calc-c2'),
+      calcV2: $('calc-v2'),
+      predictedC2: $('predicted-c2'),
+      dilutionWorking: $('dilution-working'),
+      
+      // Dissociation controls
+      selectSalt: $('select-salt'),
+      sliderSaltConc: $('slider-salt-conc'),
+      valueSaltConc: $('value-salt-conc'),
+      dissEquation: $('diss-equation'),
+      ionGrid: $('ion-grid'),
+      ionicStrength: $('ionic-strength'),
+      dissWorking: $('diss-working'),
+      liquidDiss: $('liquid-diss'),
+      dissBeakerLabel: $('diss-beaker-label'),
+      
+      // Feedback
+      feedbackPanel: $('feedback-panel'),
+      feedbackContent: $('feedback-content'),
+      
+      // Modals
+      modalTargets: $('modal-targets'),
+      modalSuccess: $('modal-success'),
+      targetsList: $('targets-list'),
+      successMessage: $('success-message'),
+      successDetails: $('success-details')
+    };
+
+    // ===== PREFERENCES APPLICATION =====
+    const applyPreferences = (prefs) => {
+      document.documentElement.setAttribute('data-font-scale', prefs.fontScale);
+      document.documentElement.classList.toggle('high-contrast', prefs.highContrast);
+      document.documentElement.classList.toggle('reduce-motion', prefs.reduceMotion);
+      document.documentElement.classList.toggle('liquid-pattern', prefs.pattern);
+      document.documentElement.classList.toggle('dyslexia-friendly', prefs.dyslexia);
+      
+      // Update toggle buttons
+      $('btn-high-contrast')?.setAttribute('aria-pressed', prefs.highContrast);
+      $('btn-reduce-motion')?.setAttribute('aria-pressed', prefs.reduceMotion);
+      $('btn-pattern')?.setAttribute('aria-pressed', prefs.pattern);
+      $('btn-dyslexia')?.setAttribute('aria-pressed', prefs.dyslexia);
+      $('btn-guided')?.setAttribute('aria-pressed', prefs.guided);
+      $('btn-show-working')?.setAttribute('aria-pressed', prefs.showWorking);
+      $('btn-input-slider')?.setAttribute('aria-pressed', prefs.inputMode === 'slider');
+      $('btn-input-number')?.setAttribute('aria-pressed', prefs.inputMode === 'number');
+      
+      // Show/hide input controls
+      if (els.controlsSlider && els.controlsNumber) {
+        els.controlsSlider.classList.toggle('hidden', prefs.inputMode !== 'slider');
+        els.controlsNumber.classList.toggle('hidden', prefs.inputMode !== 'number');
+      }
+    };
+
+    // ===== CONCENTRATION MODE =====
+    const updateConcentration = () => {
+      const state = gameStore.get();
+      const prefs = prefsStore.get();
+      const concentration = state.solute / state.volume;
+      
+      // Update displays
+      els.valueSolute.textContent = state.solute.toFixed(2);
+      els.valueVolume.textContent = state.volume.toFixed(2);
+      els.currentConcentration.textContent = `${formatM(concentration)} M`;
+      els.beakerLabel.textContent = `${formatM(concentration)} M`;
+      
+      // Sync inputs
+      if (prefs.inputMode === 'slider') {
+        els.sliderSolute.value = state.solute;
+        els.sliderVolume.value = state.volume;
+      } else {
+        els.inputSolute.value = state.solute.toFixed(2);
+        els.inputVolume.value = state.volume.toFixed(2);
+      }
+      
+      // Update beaker visual
+      const fillPercent = clamp((state.volume / CONSTANTS.VOLUME_MAX) * 100, 5, 95);
+      els.liquidConcentration.style.height = `${fillPercent}%`;
+      
+      const intensity = clamp(concentration / 2, 0, 1);
+      const r = Math.round(59 + (147 - 59) * intensity);
+      const g = Math.round(130 - 50 * intensity);
+      const b = Math.round(246 - 128 * intensity);
+      els.liquidConcentration.style.background = 
+        `linear-gradient(to top, rgba(${r},${g},${b},0.85), rgba(147,51,234,${0.4 + intensity * 0.3}))`;
+      
+      // Update working
+      if (prefs.showWorking) {
+        els.workingDisplay.textContent = 
+          `C = n/V = ${state.solute.toFixed(2)} mol / ${state.volume.toFixed(2)} L = ${formatM(concentration)} M`;
+      } else {
+        els.workingDisplay.textContent = '';
+      }
+      
+      // Guided mode hints
+      if (prefs.guided) {
+        const diff = concentration - state.target.concentration;
+        if (Math.abs(diff) < 0.02) {
+          els.concentrationHint.textContent = '✓ Very close!';
+          els.concentrationHint.classList.remove('hidden');
+        } else if (diff > 0) {
+          els.concentrationHint.textContent = '↓ Try lowering concentration';
+          els.concentrationHint.classList.remove('hidden');
+        } else {
+          els.concentrationHint.textContent = '↑ Try raising concentration';
+          els.concentrationHint.classList.remove('hidden');
+        }
+      } else {
+        els.concentrationHint.classList.add('hidden');
+      }
+    };
+
+    const checkConcentration = () => {
+      const state = gameStore.get();
+      const prefs = prefsStore.get();
+      const current = state.solute / state.volume;
+      const target = state.target.concentration;
+      
+      const tolerance = prefs.guided 
+        ? (state.level <= 3 ? CONSTANTS.TOLERANCE_EASY : CONSTANTS.TOLERANCE_NORMAL)
+        : (state.level <= 3 ? CONSTANTS.TOLERANCE_NORMAL : CONSTANTS.TOLERANCE_HARD);
+      
+      const diff = Math.abs(current - target);
+      const isCorrect = diff <= tolerance;
+      
+      showFeedback(isCorrect, current, target);
+      
+      if (isCorrect) {
+        const bonus = state.streak * CONSTANTS.STREAK_BONUS;
+        gameStore.set({
+          score: state.score + CONSTANTS.SCORE_CONCENTRATION + bonus,
+          streak: state.streak + 1
+        });
+        showSuccessModal(current, target);
+      } else {
+        gameStore.set({ streak: 0 });
+      }
+      
+      updateStats();
+    };
+
+    // ===== DILUTION MODE =====
+    const updateDilution = () => {
+      const state = gameStore.get();
+      const prefs = prefsStore.get();
+      const c2 = (state.c1 * state.v1) / state.v2;
+      
+      // Update displays
+      els.c1Display.textContent = `${state.c1.toFixed(2)} M`;
+      els.stockLabel.textContent = `${state.c1.toFixed(2)} M`;
+      els.v1Display.textContent = `${state.v1} mL`;
+      els.v2Display.textContent = `${state.v2} mL`;
+      els.c2Display.textContent = `${formatM(c2)} M`;
+      els.finalLabel.textContent = `${formatM(c2)} M`;
+      els.predictedC2.textContent = `${formatM(c2)} M`;
+      
+      // Calculation display
+      els.calcC1.textContent = state.c1.toFixed(2);
+      els.calcV1.textContent = state.v1;
+      els.calcV2.textContent = state.v2;
+      els.calcC2.textContent = formatM(c2);
+      
+      // Update beaker visual
+      const fillPercent = clamp(((state.v2 - CONSTANTS.V2_MIN) / (CONSTANTS.V2_MAX - CONSTANTS.V2_MIN)) * 80 + 15, 10, 95);
+      els.liquidFinal.style.height = `${fillPercent}%`;
+      
+      const frac = clamp(c2 / state.c1, 0, 1);
+      els.liquidFinal.style.background = 
+        `linear-gradient(to top, rgba(${59 + 161 * frac},${130 - 92 * frac},${246 - 178 * frac},0.7), rgba(147,51,234,${0.3 + 0.35 * frac}))`;
+      
+      // Working
+      if (prefs.showWorking) {
+        els.dilutionWorking.textContent = 
+          `C₂ = (C₁ × V₁) / V₂ = (${state.c1.toFixed(2)} × ${state.v1}) / ${state.v2} = ${formatM(c2)} M`;
+      } else {
+        els.dilutionWorking.textContent = '';
+      }
+    };
+
+    const checkDilution = () => {
+      const state = gameStore.get();
+      const prefs = prefsStore.get();
+      const c2 = (state.c1 * state.v1) / state.v2;
+      const target = state.targetC2;
+      
+      const tolerance = prefs.guided 
+        ? (state.level <= 3 ? CONSTANTS.TOLERANCE_EASY : CONSTANTS.TOLERANCE_NORMAL)
+        : (state.level <= 3 ? CONSTANTS.TOLERANCE_NORMAL : CONSTANTS.TOLERANCE_HARD);
+      
+      const isCorrect = Math.abs(c2 - target) <= tolerance;
+      
+      showFeedback(isCorrect, c2, target, 'dilution');
+      
+      if (isCorrect) {
+        const bonus = state.streak * CONSTANTS.STREAK_BONUS;
+        gameStore.set({
+          score: state.score + CONSTANTS.SCORE_DILUTION + bonus,
+          streak: state.streak + 1
+        });
+        showSuccessModal(c2, target, 'dilution');
+      } else {
+        gameStore.set({ streak: 0 });
+      }
+      
+      updateStats();
+    };
+
+    // ===== DISSOCIATION MODE =====
+    const initSaltSelect = () => {
+      els.selectSalt.innerHTML = SALTS.map(s => 
+        `<option value="${s.id}">${s.name} (${s.formula})</option>`
+      ).join('');
+    };
+
+    const updateDissociation = () => {
+      const state = gameStore.get();
+      const prefs = prefsStore.get();
+      const salt = SALTS.find(s => s.id === state.saltId);
+      if (!salt) return;
+      
+      const conc = state.saltConc;
+      els.valueSaltConc.textContent = conc.toFixed(2);
+      
+      // Equation
+      const products = salt.ions.map(ion => 
+        `${ion.n > 1 ? ion.n : ''}${ion.sym}(aq)`
+      ).join(' + ');
+      els.dissEquation.textContent = `${salt.formula}(aq) → ${products}`;
+      
+      // Ion grid
+      els.ionGrid.innerHTML = salt.ions.map(ion => {
+        const ionConc = ion.n * conc;
+        return `
+          <div class="bg-white rounded-lg border border-emerald-200 p-3 text-center">
+            <div class="text-sm font-semibold text-gray-700">${ion.sym}</div>
+            <div class="text-xl font-bold text-emerald-600">${formatM(ionConc)} M</div>
+            <div class="text-xs text-gray-500">= ${ion.n} × ${formatM(conc)}</div>
+          </div>
+        `;
+      }).join('');
+      
+      // Ionic strength: I = 0.5 × Σ(c × z²)
+      const ionicStr = 0.5 * salt.ions.reduce((sum, ion) => 
+        sum + (ion.n * conc) * (ion.z * ion.z), 0
+      );
+      els.ionicStrength.textContent = formatM(ionicStr);
+      
+      // Working
+      if (prefs.showWorking) {
+        const terms = salt.ions.map(ion => 
+          `${formatM(ion.n * conc)} × ${ion.z}²`
+        ).join(' + ');
+        els.dissWorking.textContent = `I = ½ × (${terms}) = ${formatM(ionicStr)} M`;
+      } else {
+        els.dissWorking.textContent = '';
+      }
+      
+      // Visual
+      const totalIons = salt.ions.reduce((sum, ion) => sum + ion.n * conc, 0);
+      const frac = clamp(totalIons / 6, 0, 1);
+      els.liquidDiss.style.background = 
+        `linear-gradient(to top, rgba(16,185,129,${0.55 + 0.3 * frac}), rgba(20,184,166,${0.4 + 0.25 * frac}))`;
+      els.dissBeakerLabel.textContent = `Σ ions: ${formatM(totalIons)} M`;
+    };
+
+    // ===== FEEDBACK =====
+    const showFeedback = (isCorrect, current, target, type = 'concentration') => {
+      els.feedbackPanel.classList.remove('hidden', 'feedback-success', 'feedback-error');
+      els.feedbackPanel.classList.add(isCorrect ? 'feedback-success' : 'feedback-error');
+      
+      const diff = current - target;
+      let message;
+      
+      if (isCorrect) {
+        message = `
+          <div class="text-green-700">
+            <div class="text-4xl mb-2">✓</div>
+            <h4 class="text-xl font-bold mb-1">Correct!</h4>
+            <p>You achieved ${formatM(current)} M (target: ${formatM(target)} M)</p>
+          </div>
+        `;
+        announce('Correct! Well done.');
+      } else {
+        const hint = type === 'concentration'
+          ? (diff > 0 ? 'Try decreasing solute or increasing volume.' : 'Try increasing solute or decreasing volume.')
+          : (diff > 0 ? 'Try decreasing V₁ or increasing V₂.' : 'Try increasing V₁ or decreasing V₂.');
+        
+        message = `
+          <div class="text-red-700">
+            <div class="text-4xl mb-2">✗</div>
+            <h4 class="text-xl font-bold mb-1">Not quite</h4>
+            <p>You got ${formatM(current)} M (target: ${formatM(target)} M)</p>
+            <p class="text-sm mt-2 opacity-80">${hint}</p>
+          </div>
+        `;
+        announce(`Incorrect. ${hint}`);
+      }
+      
+      els.feedbackContent.innerHTML = message;
+    };
+
+    const hideFeedback = () => {
+      els.feedbackPanel.classList.add('hidden');
+      els.feedbackPanel.classList.remove('feedback-success', 'feedback-error');
+    };
+
+    // ===== MODALS =====
+    const showSuccessModal = (current, target, type = 'concentration') => {
+      document.body.classList.add('modal-open');
+      els.modalSuccess.classList.remove('hidden');
+      els.modalSuccess.classList.add('flex');
+      
+      els.successMessage.textContent = 'Perfect solution!';
+      els.successDetails.textContent = type === 'concentration'
+        ? `You created a ${formatM(current)} M solution (target: ${formatM(target)} M)`
+        : `You diluted to ${formatM(current)} M (target: ${formatM(target)} M)`;
+      
+      $('btn-next-level')?.focus();
+    };
+
+    const hideSuccessModal = () => {
+      document.body.classList.remove('modal-open');
+      els.modalSuccess.classList.add('hidden');
+      els.modalSuccess.classList.remove('flex');
+    };
+
+    const showTargetsModal = () => {
+      const state = gameStore.get();
+      if (state.mode === 'dissociation') return;
+      
+      document.body.classList.add('modal-open');
+      els.modalTargets.classList.remove('hidden');
+      els.modalTargets.classList.add('flex');
+      
+      $('targets-mode-badge').textContent = state.mode === 'concentration' ? 'Concentration' : 'Dilution';
+      $('targets-mode-badge').className = `badge ${state.mode === 'concentration' ? 'badge-blue' : 'badge-purple'}`;
+      
+      populateTargetsList();
+      $('input-targets-search')?.focus();
+    };
+
+    const hideTargetsModal = () => {
+      document.body.classList.remove('modal-open');
+      els.modalTargets.classList.add('hidden');
+      els.modalTargets.classList.remove('flex');
+    };
+
+    const populateTargetsList = () => {
+      const state = gameStore.get();
+      const search = ($('input-targets-search')?.value || '').toLowerCase();
+      const category = $('select-targets-category')?.value || 'all';
+      
+      const challenges = state.mode === 'concentration' ? CONCENTRATION_CHALLENGES : DILUTION_CHALLENGES;
+      
+      const filtered = challenges.filter(ch => {
+        const text = `${ch.compound} ${ch.context} ${ch.category}`.toLowerCase();
+        const matchSearch = !search || text.includes(search);
+        const matchCategory = category === 'all' || ch.category === category;
+        return matchSearch && matchCategory;
+      });
+      
+      els.targetsList.innerHTML = filtered.map((ch, idx) => {
+        const badgeClass = {
+          acids: 'badge-red',
+          bases: 'badge-green',
+          electrolytes: 'badge-blue',
+          redox: 'badge-purple',
+          bio: 'badge-amber',
+          general: 'badge-blue'
+        }[ch.category] || 'badge-blue';
+        
+        if (state.mode === 'concentration') {
+          return `
+            <button class="target-card card p-4 text-left hover:shadow-lg transition-shadow" data-index="${idx}">
+              <div class="text-sm text-gray-600 mb-1">${ch.compound}</div>
+              <div class="text-2xl font-bold text-gray-900 mb-2">${formatM(ch.target)} M</div>
+              <div class="text-xs text-gray-500 mb-2">${ch.context}</div>
+              <span class="badge ${badgeClass}">${ch.category}</span>
+            </button>
+          `;
+        } else {
+          return `
+            <button class="target-card card p-4 text-left hover:shadow-lg transition-shadow" data-index="${idx}">
+              <div class="text-sm text-gray-600 mb-1">${ch.compound}</div>
+              <div class="text-sm text-gray-800">
+                <div><strong>C₁:</strong> ${ch.c1.toFixed(2)} M</div>
+                <div><strong>Target C₂:</strong> ${formatM(ch.target)} M</div>
+              </div>
+              <div class="text-xs text-gray-500 my-2">${ch.context}</div>
+              <span class="badge ${badgeClass}">${ch.category}</span>
+            </button>
+          `;
+        }
+      }).join('');
+    };
+
+    // ===== CHALLENGE GENERATION =====
+    const newConcentrationChallenge = () => {
+      const state = gameStore.get();
+      const level = state.level;
+      
+      let challenge;
+      if (level <= CONCENTRATION_CHALLENGES.length) {
+        challenge = CONCENTRATION_CHALLENGES[level - 1];
+      } else {
+        // Random generation for higher levels
+        const minConc = 0.1;
+        const maxConc = Math.min(1.5 + level * 0.1, 3.0);
+        challenge = {
+          compound: randomItem(COMPOUNDS),
+          target: Math.round((Math.random() * (maxConc - minConc) + minConc) * 100) / 100,
+          context: 'Random challenge'
+        };
+      }
+      
+      gameStore.set({
+        target: { concentration: challenge.target, compound: challenge.compound, context: challenge.context },
+        solute: 0.5,
+        volume: 1.0
+      });
+      
+      // Update UI
+      els.targetTitle.textContent = 'Target Concentration';
+      els.targetValue.textContent = `${formatM(challenge.target)} M`;
+      els.targetCompound.textContent = challenge.compound;
+      els.targetContext.textContent = challenge.context || '';
+      els.missionText.textContent = `Create a ${formatM(challenge.target)} M solution of ${challenge.compound}`;
+      els.formulaDisplay.innerHTML = '<strong>Formula:</strong> C = n / V (Concentration = moles / volume)';
+      
+      els.sliderSolute.value = 0.5;
+      els.sliderVolume.value = 1.0;
+      
+      hideFeedback();
+      updateConcentration();
+      announce(`New challenge: Create ${formatM(challenge.target)} M ${challenge.compound}`);
+    };
+
+    const newDilutionChallenge = () => {
+      const state = gameStore.get();
+      const level = state.level;
+      
+      let challenge;
+      if (level <= DILUTION_CHALLENGES.length) {
+        challenge = DILUTION_CHALLENGES[level - 1];
+      } else {
+        const c1 = Math.round((Math.random() * 2 + 1) * 100) / 100;
+        const frac = Math.round((Math.random() * 0.8 + 0.1) * 100) / 100;
+        challenge = {
+          compound: randomItem(COMPOUNDS),
+          c1,
+          target: Math.max(0.05, Math.round(c1 * frac * 100) / 100),
+          v2: 500,
+          context: 'Random dilution challenge'
+        };
+      }
+      
+      gameStore.set({
+        c1: challenge.c1,
+        v1: 250,
+        v2: challenge.v2,
+        targetC2: challenge.target,
+        target: { concentration: challenge.target, compound: challenge.compound, context: challenge.context }
+      });
+      
+      els.targetTitle.textContent = 'Target Concentration (C₂)';
+      els.targetValue.textContent = `${formatM(challenge.target)} M`;
+      els.targetCompound.textContent = challenge.compound;
+      els.targetContext.textContent = challenge.context || '';
+      els.missionText.textContent = `Dilute ${challenge.c1.toFixed(2)} M stock to ${formatM(challenge.target)} M`;
+      els.formulaDisplay.innerHTML = '<strong>Formula:</strong> C₁V₁ = C₂V₂';
+      
+      els.sliderV1.value = 250;
+      els.sliderV2.value = challenge.v2;
+      
+      hideFeedback();
+      updateDilution();
+      announce(`New challenge: Dilute to ${formatM(challenge.target)} M`);
+    };
+
+    // ===== STATS UPDATE =====
+    const updateStats = () => {
+      const state = gameStore.get();
+      els.statLevel.textContent = state.level;
+      els.statScore.textContent = state.score;
+      els.statStreak.textContent = `🔥 ${state.streak}`;
+    };
+
+    // ===== SCREEN TRANSITIONS =====
+    const showScreen = (screen) => {
+      [els.startScreen, els.modeScreen, els.gameContainer].forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      });
+      screen.classList.remove('hidden');
+      if (screen !== els.gameContainer) {
+        screen.classList.add('flex');
+      }
+    };
+
+    const startMode = (mode) => {
+      gameStore.set({ mode, level: 1, score: 0, streak: 0 });
+      
+      // Update mode badge
+      const modeNames = { concentration: 'Concentration', dilution: 'Dilution', dissociation: 'Dissociation' };
+      const modeColors = { concentration: 'badge-blue', dilution: 'badge-purple', dissociation: 'badge-green' };
+      
+      els.statMode.textContent = modeNames[mode];
+      els.statMode.className = `font-semibold badge ${modeColors[mode]}`;
+      
+      $('mode-title').textContent = `Chemistry ${modeNames[mode]} Lab`;
+      
+      // Show/hide interfaces
+      els.interfaceConcentration.classList.toggle('hidden', mode !== 'concentration');
+      els.interfaceDilution.classList.toggle('hidden', mode !== 'dilution');
+      els.interfaceDissociation.classList.toggle('hidden', mode !== 'dissociation');
+      
+      // Hide targets button for dissociation mode
+      $('btn-targets').classList.toggle('hidden', mode === 'dissociation');
+      
+      showScreen(els.gameContainer);
+      
+      if (mode === 'concentration') {
+        newConcentrationChallenge();
+      } else if (mode === 'dilution') {
+        newDilutionChallenge();
+      } else {
+        // Dissociation - exploratory mode
+        els.targetTitle.textContent = 'Explore Dissociation';
+        els.targetValue.textContent = '—';
+        els.targetCompound.textContent = 'Select a compound to explore';
+        els.missionText.textContent = 'Explore how ionic compounds dissociate in water.';
+        els.formulaDisplay.innerHTML = '<strong>Concept:</strong> Strong electrolytes fully dissociate: [ion] = coefficient × [salt]';
+        initSaltSelect();
+        updateDissociation();
+      }
+      
+      updateStats();
+    };
+
+    // ===== EVENT HANDLERS =====
+    const setupEventListeners = () => {
+      // Start button
+      $('btn-start')?.addEventListener('click', () => {
+        showScreen(els.modeScreen);
+        announce('Select an experiment mode.');
+      });
+      
+      // Back button
+      $('btn-back-start')?.addEventListener('click', () => {
+        showScreen(els.startScreen);
+      });
+      
+      // Mode cards
+      $$('.mode-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const mode = card.dataset.mode;
+          if (mode) startMode(mode);
+        });
+      });
+      
+      // Change mode
+      $('btn-change-mode')?.addEventListener('click', () => {
+        showScreen(els.modeScreen);
+        gameStore.set({ level: 0, score: 0, streak: 0 });
+      });
+      
+      // Concentration sliders
+      const debouncedConcentrationUpdate = debounce(updateConcentration, CONSTANTS.DEBOUNCE_MS);
+      
+      els.sliderSolute?.addEventListener('input', (e) => {
+        gameStore.set({ solute: parseFloat(e.target.value) });
+        debouncedConcentrationUpdate();
+      });
+      
+      els.sliderVolume?.addEventListener('input', (e) => {
+        gameStore.set({ volume: parseFloat(e.target.value) });
+        debouncedConcentrationUpdate();
+      });
+      
+      // Number inputs
+      els.inputSolute?.addEventListener('input', (e) => {
+        const val = clamp(parseFloat(e.target.value) || 0, CONSTANTS.SOLUTE_MIN, CONSTANTS.SOLUTE_MAX);
+        gameStore.set({ solute: val });
+        els.sliderSolute.value = val;
+        updateConcentration();
+      });
+      
+      els.inputVolume?.addEventListener('input', (e) => {
+        const val = clamp(parseFloat(e.target.value) || 0.1, CONSTANTS.VOLUME_MIN, CONSTANTS.VOLUME_MAX);
+        gameStore.set({ volume: val });
+        els.sliderVolume.value = val;
+        updateConcentration();
+      });
+      
+      // +/- buttons
+      $('btn-solute-minus')?.addEventListener('click', () => {
+        const state = gameStore.get();
+        gameStore.set({ solute: clamp(state.solute - 0.01, CONSTANTS.SOLUTE_MIN, CONSTANTS.SOLUTE_MAX) });
+        updateConcentration();
+      });
+      
+      $('btn-solute-plus')?.addEventListener('click', () => {
+        const state = gameStore.get();
+        gameStore.set({ solute: clamp(state.solute + 0.01, CONSTANTS.SOLUTE_MIN, CONSTANTS.SOLUTE_MAX) });
+        updateConcentration();
+      });
+      
+      $('btn-volume-minus')?.addEventListener('click', () => {
+        const state = gameStore.get();
+        gameStore.set({ volume: clamp(state.volume - 0.01, CONSTANTS.VOLUME_MIN, CONSTANTS.VOLUME_MAX) });
+        updateConcentration();
+      });
+      
+      $('btn-volume-plus')?.addEventListener('click', () => {
+        const state = gameStore.get();
+        gameStore.set({ volume: clamp(state.volume + 0.01, CONSTANTS.VOLUME_MIN, CONSTANTS.VOLUME_MAX) });
+        updateConcentration();
+      });
+      
+      // Check/Reset concentration
+      $('btn-check')?.addEventListener('click', checkConcentration);
+      $('btn-reset')?.addEventListener('click', () => {
+        gameStore.set({ solute: 0.5, volume: 1.0 });
+        els.sliderSolute.value = 0.5;
+        els.sliderVolume.value = 1.0;
+        hideFeedback();
+        updateConcentration();
+        announce('Controls reset.');
+      });
+      
+      // Dilution sliders
+      els.sliderV1?.addEventListener('input', (e) => {
+        gameStore.set({ v1: parseInt(e.target.value) });
+        updateDilution();
+      });
+      
+      els.sliderV2?.addEventListener('input', (e) => {
+        gameStore.set({ v2: parseInt(e.target.value) });
+        updateDilution();
+      });
+      
+      $('btn-transfer')?.addEventListener('click', () => {
+        // Visual feedback
+        const liquid = els.liquidFinal;
+        const h = parseFloat(liquid.style.height);
+        liquid.style.height = `${Math.min(h + 3, 95)}%`;
+        setTimeout(updateDilution, 150);
+      });
+      
+      $('btn-check-dilution')?.addEventListener('click', checkDilution);
+      $('btn-reset-dilution')?.addEventListener('click', () => {
+        gameStore.set({ v1: 250, v2: 500 });
+        els.sliderV1.value = 250;
+        els.sliderV2.value = 500;
+        hideFeedback();
+        updateDilution();
+      });
+      
+      // Dissociation
+      els.selectSalt?.addEventListener('change', (e) => {
+        gameStore.set({ saltId: e.target.value });
+        updateDissociation();
+      });
+      
+      els.sliderSaltConc?.addEventListener('input', (e) => {
+        gameStore.set({ saltConc: parseFloat(e.target.value) });
+        updateDissociation();
+      });
+      
+      $('btn-reset-diss')?.addEventListener('click', () => {
+        gameStore.set({ saltId: 'nacl', saltConc: 1.0 });
+        els.selectSalt.value = 'nacl';
+        els.sliderSaltConc.value = 1.0;
+        updateDissociation();
+      });
+      
+      // Success modal
+      $('btn-next-level')?.addEventListener('click', () => {
+        const state = gameStore.get();
+        hideSuccessModal();
+        gameStore.set({ level: state.level + 1 });
+        
+        if (state.mode === 'concentration') {
+          newConcentrationChallenge();
+        } else if (state.mode === 'dilution') {
+          newDilutionChallenge();
+        }
+        updateStats();
+      });
+      
+      // Targets modal
+      $('btn-targets')?.addEventListener('click', showTargetsModal);
+      $('btn-close-targets')?.addEventListener('click', hideTargetsModal);
+      $('input-targets-search')?.addEventListener('input', populateTargetsList);
+      $('select-targets-category')?.addEventListener('change', populateTargetsList);
+      
+      els.modalTargets?.addEventListener('click', (e) => {
+        if (e.target === els.modalTargets) hideTargetsModal();
+      });
+      
+      // Target selection
+      els.targetsList?.addEventListener('click', (e) => {
+        const card = e.target.closest('.target-card');
+        if (!card) return;
+        
+        const idx = parseInt(card.dataset.index);
+        const state = gameStore.get();
+        const challenges = state.mode === 'concentration' ? CONCENTRATION_CHALLENGES : DILUTION_CHALLENGES;
+        const ch = challenges[idx];
+        
+        if (state.mode === 'concentration') {
+          gameStore.set({
+            target: { concentration: ch.target, compound: ch.compound, context: ch.context },
+            solute: 0.5,
+            volume: 1.0
+          });
+          els.targetValue.textContent = `${formatM(ch.target)} M`;
+          els.targetCompound.textContent = ch.compound;
+          els.targetContext.textContent = ch.context || '';
+          els.missionText.textContent = `Create a ${formatM(ch.target)} M solution of ${ch.compound}`;
+          updateConcentration();
+        } else {
+          gameStore.set({
+            c1: ch.c1,
+            v1: 250,
+            v2: ch.v2,
+            targetC2: ch.target,
+            target: { concentration: ch.target, compound: ch.compound, context: ch.context }
+          });
+          els.targetValue.textContent = `${formatM(ch.target)} M`;
+          els.targetCompound.textContent = ch.compound;
+          els.targetContext.textContent = ch.context || '';
+          els.missionText.textContent = `Dilute ${ch.c1.toFixed(2)} M stock to ${formatM(ch.target)} M`;
+          els.sliderV1.value = 250;
+          els.sliderV2.value = ch.v2;
+          updateDilution();
+        }
+        
+        hideTargetsModal();
+        hideFeedback();
+      });
+      
+      // Preferences
+      $('btn-text-smaller')?.addEventListener('click', () => {
+        const scales = ['0.9', '1.0', '1.1', '1.2', '1.3', '1.4'];
+        const current = prefsStore.get().fontScale;
+        const idx = Math.max(0, scales.indexOf(current) - 1);
+        prefsStore.set({ fontScale: scales[idx] });
+      });
+      
+      $('btn-text-larger')?.addEventListener('click', () => {
+        const scales = ['0.9', '1.0', '1.1', '1.2', '1.3', '1.4'];
+        const current = prefsStore.get().fontScale;
+        const idx = Math.min(scales.length - 1, scales.indexOf(current) + 1);
+        prefsStore.set({ fontScale: scales[idx] });
+      });
+      
+      $('btn-high-contrast')?.addEventListener('click', () => {
+        const prefs = prefsStore.get();
+        prefsStore.set({ highContrast: !prefs.highContrast });
+      });
+      
+      $('btn-reduce-motion')?.addEventListener('click', () => {
+        const prefs = prefsStore.get();
+        prefsStore.set({ reduceMotion: !prefs.reduceMotion });
+      });
+      
+      $('btn-pattern')?.addEventListener('click', () => {
+        const prefs = prefsStore.get();
+        prefsStore.set({ pattern: !prefs.pattern });
+      });
+      
+      $('btn-dyslexia')?.addEventListener('click', () => {
+        const prefs = prefsStore.get();
+        prefsStore.set({ dyslexia: !prefs.dyslexia });
+      });
+      
+      $('btn-guided')?.addEventListener('click', () => {
+        const prefs = prefsStore.get();
+        prefsStore.set({ guided: !prefs.guided });
+        announce(prefs.guided ? 'Guided mode off.' : 'Guided mode on - more hints available.');
+      });
+      
+      $('btn-show-working')?.addEventListener('click', () => {
+        const prefs = prefsStore.get();
+        prefsStore.set({ showWorking: !prefs.showWorking });
+        // Refresh current display
+        const state = gameStore.get();
+        if (state.mode === 'concentration') updateConcentration();
+        else if (state.mode === 'dilution') updateDilution();
+        else updateDissociation();
+      });
+      
+      $('btn-input-slider')?.addEventListener('click', () => {
+        prefsStore.set({ inputMode: 'slider' });
+      });
+      
+      $('btn-input-number')?.addEventListener('click', () => {
+        prefsStore.set({ inputMode: 'number' });
+      });
+      
+      // Keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        const state = gameStore.get();
+        
+        // Enter to start/continue
+        if (e.key === 'Enter') {
+          if (!els.startScreen.classList.contains('hidden')) {
+            $('btn-start')?.click();
+            return;
+          }
+          if (!els.modalSuccess.classList.contains('hidden')) {
+            $('btn-next-level')?.click();
+            return;
+          }
+        }
+        
+        // Escape to close modals
+        if (e.key === 'Escape') {
+          if (!els.modalTargets.classList.contains('hidden')) {
+            hideTargetsModal();
+            return;
+          }
+        }
+        
+        // Arrow keys for adjustments (only in game)
+        if (els.gameContainer.classList.contains('hidden')) return;
+        
+        const arrows = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+        if (!arrows.includes(e.key)) return;
+        
+        e.preventDefault();
+        const step = e.shiftKey ? 0.05 : 0.01;
+        
+        if (state.mode === 'concentration') {
+          if (e.key === 'ArrowUp') {
+            gameStore.set({ solute: clamp(state.solute + step, CONSTANTS.SOLUTE_MIN, CONSTANTS.SOLUTE_MAX) });
+          } else if (e.key === 'ArrowDown') {
+            gameStore.set({ solute: clamp(state.solute - step, CONSTANTS.SOLUTE_MIN, CONSTANTS.SOLUTE_MAX) });
+          } else if (e.key === 'ArrowRight') {
+            gameStore.set({ volume: clamp(state.volume + step, CONSTANTS.VOLUME_MIN, CONSTANTS.VOLUME_MAX) });
+          } else if (e.key === 'ArrowLeft') {
+            gameStore.set({ volume: clamp(state.volume - step, CONSTANTS.VOLUME_MIN, CONSTANTS.VOLUME_MAX) });
+          }
+          updateConcentration();
+        } else if (state.mode === 'dilution') {
+          const dilStep = e.shiftKey ? 10 : 1;
+          if (e.key === 'ArrowUp') {
+            gameStore.set({ v1: clamp(state.v1 + dilStep, 0, CONSTANTS.V1_MAX) });
+          } else if (e.key === 'ArrowDown') {
+            gameStore.set({ v1: clamp(state.v1 - dilStep, 0, CONSTANTS.V1_MAX) });
+          } else if (e.key === 'ArrowRight') {
+            gameStore.set({ v2: clamp(state.v2 + dilStep * 10, CONSTANTS.V2_MIN, CONSTANTS.V2_MAX) });
+          } else if (e.key === 'ArrowLeft') {
+            gameStore.set({ v2: clamp(state.v2 - dilStep * 10, CONSTANTS.V2_MIN, CONSTANTS.V2_MAX) });
+          }
+          els.sliderV1.value = gameStore.get().v1;
+          els.sliderV2.value = gameStore.get().v2;
+          updateDilution();
+        } else if (state.mode === 'dissociation') {
+          if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
+            gameStore.set({ saltConc: clamp(state.saltConc + step, 0, CONSTANTS.SALT_CONC_MAX) });
+          } else {
+            gameStore.set({ saltConc: clamp(state.saltConc - step, 0, CONSTANTS.SALT_CONC_MAX) });
+          }
+          els.sliderSaltConc.value = gameStore.get().saltConc;
+          updateDissociation();
+        }
+      });
+    };
+
+    // ===== VIEWPORT HEIGHT FIX =====
+    const setVh = () => {
+      document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    };
+    
+    // ===== INITIALIZATION =====
+    const init = () => {
+      setVh();
+      window.addEventListener('resize', debounce(setVh, 100));
+      
+      applyPreferences(prefsStore.get());
+      setupEventListeners();
+      updateConcentration();
+      
+      // Respect prefers-reduced-motion
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        prefsStore.set({ reduceMotion: true });
+      }
+    };
+
+    // Start
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+  </script>
+</body>
+</html>
