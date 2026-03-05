@@ -51,8 +51,7 @@ Undertaking research as part of a cohesive international team with tight deadlin
 
 **2014–2018**: Lab Demonstrator and Teaching Fellow, The University of Sydney, Australia
 
-Chemistry Lab Demonstrator for First-year Standard and Special Studies Program, and Third Year, and Postgraduate Teaching Fellow for First-year Chemistry
-Instructing groups of students during a 3–4 hour lab session, demonstrating safe lab practice, scientific research methodology, data analysis skills, and marking reports providing constructive feedback. Teaching 1-hour tutorials, liaising with lecturers to prepare lesson content and marking exam papers. Encouraging peer to peer communication and discussion of concepts with a focus on self-directed learning whilst testing student understanding to maintain engagement. Time distributed evenly between students during class, with additional assistance via responding to student questions online.
+Chemistry Lab Demonstrator for first-year Standard and Special Studies Program, and third-year, and Postgraduate Teaching Fellow for first-year chemistry. Instructing groups of students during a 3–4 hour lab session, demonstrating safe lab practice, scientific research methodology, data analysis skills, and marking reports providing constructive feedback. Teaching 1-hour tutorials, liaising with lecturers to prepare lesson content and marking exam papers. Encouraging peer to peer communication and discussion of concepts with a focus on self-directed learning whilst testing student understanding to maintain engagement. Time distributed evenly between students during class, with additional assistance via responding to student questions online.
 
 **2012–2014**: Regulatory Scientist, NSW Government National Industrial Chemicals Notification and Assessment Scheme
 
