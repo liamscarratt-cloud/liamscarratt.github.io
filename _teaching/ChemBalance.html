@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>ChemBalance Pro: Interactive Equation Balancer</title>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<script src="assets/script_eeae0ef6.js"></script>
+<meta content="Interactive chemistry learning tool for balancing chemical equations with guided hints, difficulty levels, and detailed feedback." name="description"/>
+<style>
+    :root {
+      --primary: #3b82f6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+    
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0fdf4 100%);
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: linear-gradient(135deg, #0c1929 0%, #0f172a 50%, #0d1f17 100%);
+        color: #f1f5f9;
+      }
+    }
+    
+    :focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
+    }
+    
+    .chem-sub { 
+      font-size: 0.75em; 
+      vertical-align: baseline;
+      position: relative;
+      top: 0.3em;
+    }
+    
+    .dragging { opacity: 0.5; transform: scale(1.1); }
+    .drop-highlight { 
+      background: rgba(59, 130, 246, 0.2) !important;
+      border-color: var(--primary) !important;
+    }
+    
+    .coeff-badge {
+      min-width: 2.5rem;
+      transition: all 0.2s ease;
+    }
+    .coeff-badge:hover { transform: scale(1.05); }
+    .coeff-badge.changed { animation: pop 0.3s ease; }
+    
+    @keyframes pop {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+    
+    .element-card { transition: all 0.3s ease; }
+    .element-card.balanced {
+      background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+      border-color: #10b981;
+    }
+    .element-card.unbalanced {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border-color: #f59e0b;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .element-card.balanced { background: linear-gradient(135deg, #064e3b, #065f46); }
+      .element-card.unbalanced { background: linear-gradient(135deg, #78350f, #92400e); }
+    }
+    
+    .success-glow { animation: glow 1.5s ease-in-out infinite alternate; }
+    @keyframes glow {
+      from { box-shadow: 0 0 5px #10b981, 0 0 10px #10b981, 0 0 15px #10b981; }
+      to { box-shadow: 0 0 10px #10b981, 0 0 20px #10b981, 0 0 30px #10b981; }
+    }
+    
+    .confetti {
+      position: fixed;
+      pointer-events: none;
+      z-index: 100;
+      animation: confetti-fall 1.5s ease-out forwards;
+    }
+    @keyframes confetti-fall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+    
+    .token {
+      cursor: grab;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .token:hover { transform: translateY(-3px); }
+    .token:active { cursor: grabbing; }
+    
+    .hint-highlight { animation: hint-pulse 1s ease-in-out infinite; }
+    @keyframes hint-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+    }
+    
+    .progress-fill { transition: width 0.4s ease; }
+    
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+<script>
+                window.load_data_from_csv = (filename) => {
+                    // Implementation needed when code is downloaded
+                };
+
+                window.save_data_to_csv = (filename, data) => {
+                    // Implementation needed when code is downloaded
+                };
+
+                window.call_llm = (system_prompt, user_messages, json_fields) => {
+                    // Implementation needed when code is downloaded
+                };
+            </script></head>
+<body class="antialiased text-slate-900 dark:text-slate-100">
+<div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+<!-- Header -->
+<header class="mb-6">
+<div class="flex items-center justify-between flex-wrap gap-4">
+<div class="flex items-center gap-3">
+<div aria-hidden="true" class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center text-2xl shadow-lg">⚗️</div>
+<div>
+<h1 class="text-2xl sm:text-3xl font-bold tracking-tight">ChemBalance Pro</h1>
+<p class="text-sm text-slate-600 dark:text-slate-400">Master chemical equation balancing</p>
+</div>
+</div>
+<!-- Score & Streak -->
+<div class="flex items-center gap-4 text-sm">
+<div class="flex items-center gap-2 px-3 py-2 bg-white/80 dark:bg-slate-800/80 rounded-lg border-2 border-slate-200 dark:border-slate-700 shadow-sm">
+<span class="text-amber-500">🏆</span>
+<span class="font-semibold">Score: <span id="score">0</span></span>
+</div>
+<div class="flex items-center gap-2 px-3 py-2 bg-white/80 dark:bg-slate-800/80 rounded-lg border-2 border-slate-200 dark:border-slate-700 shadow-sm">
+<span class="text-orange-500">🔥</span>
+<span class="font-semibold">Streak: <span id="streak">0</span></span>
+</div>
+</div>
+</div>
+</header>
+<main class="space-y-6">
+<!-- Difficulty & Controls -->
+<section class="flex flex-wrap items-center justify-between gap-4 p-4 bg-white/90 dark:bg-slate-800/90 rounded-xl border-2 border-slate-200 dark:border-slate-700 shadow-md backdrop-blur">
+<div class="flex items-center gap-3">
+<label class="font-medium text-sm" for="difficulty">Difficulty:</label>
+<select class="px-3 py-2 rounded-lg border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-sm font-medium focus:border-blue-500" id="difficulty">
+<option value="easy">🌱 Easy</option>
+<option selected="" value="medium">🌿 Medium</option>
+<option value="hard">🌳 Hard</option>
+<option value="expert">🔥 Expert</option>
+</select>
+</div>
+<div class="flex items-center gap-2">
+<button aria-label="Undo last change" class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed" disabled="" id="undo-btn">
+            ↩️ Undo
+          </button>
+<button aria-label="Reset coefficients" class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors text-sm font-medium" id="reset-btn">
+            🔄 Reset
+          </button>
+<button aria-label="Get new equation" class="px-3 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm" id="new-btn">
+            ✨ New Equation
+          </button>
+</div>
+</section>
+<!-- Scenario Card -->
+<section class="p-4 sm:p-5 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/50 dark:to-cyan-950/50 rounded-xl border-2 border-blue-200 dark:border-blue-800 shadow-md" id="scenario-card">
+<div class="flex items-start gap-3">
+<span aria-hidden="true" class="text-2xl">📋</span>
+<div>
+<h2 class="font-semibold text-lg mb-1">Scenario</h2>
+<p class="text-slate-700 dark:text-slate-300" id="scenario-text">Loading...</p>
+</div>
+</div>
+</section>
+<!-- Main Equation Card -->
+<section class="p-4 sm:p-6 bg-white/95 dark:bg-slate-800/95 rounded-xl border-2 border-slate-200 dark:border-slate-700 shadow-lg backdrop-blur transition-all" id="equation-card">
+<div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+<h2 class="font-semibold text-lg flex items-center gap-2">
+<span aria-hidden="true">⚖️</span>
+            Balance this equation
+          </h2>
+<div class="px-3 py-1 rounded-full text-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200 border border-amber-300 dark:border-amber-700" id="balance-badge">
+            Not Balanced
+          </div>
+</div>
+<!-- Equation Display -->
+<div class="mb-6 overflow-x-auto pb-2" id="equation-container"></div>
+<!-- Coefficient Tokens -->
+<div class="mb-4">
+<h3 class="text-sm font-medium mb-2 flex items-center gap-2">
+<span aria-hidden="true">🎯</span>
+            Drag a coefficient or click to select, then click a compound
+          </h3>
+<div aria-label="Coefficient tokens" class="flex gap-2 flex-wrap" id="token-tray" role="listbox"></div>
+</div>
+<!-- Hint Button -->
+<div class="flex items-center gap-2 mt-4">
+<button aria-controls="hint-panel" aria-expanded="false" class="px-4 py-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200 hover:bg-emerald-200 dark:hover:bg-emerald-900 transition-colors text-sm font-medium border border-emerald-300 dark:border-emerald-700" id="hint-btn">
+            💡 Show Hint
+          </button>
+<button class="px-4 py-2 rounded-lg bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 hover:bg-purple-200 dark:hover:bg-purple-900 transition-colors text-sm font-medium border border-purple-300 dark:border-purple-700" id="solution-btn">
+            🎯 Show Solution
+          </button>
+</div>
+<!-- Hint Panel -->
+<div class="mt-4 p-4 bg-emerald-50 dark:bg-emerald-950/50 rounded-lg border border-emerald-200 dark:border-emerald-800 hidden" id="hint-panel">
+<h4 class="font-semibold mb-2 flex items-center gap-2">
+<span>💡</span> Balancing Tips
+          </h4>
+<ul class="list-disc list-inside space-y-1 text-sm text-slate-700 dark:text-slate-300" id="hint-list"></ul>
+</div>
+</section>
+<!-- Live Status & Element Counts -->
+<section class="p-4 sm:p-5 bg-white/90 dark:bg-slate-800/90 rounded-xl border-2 border-slate-200 dark:border-slate-700 shadow-md backdrop-blur">
+<h2 class="font-semibold text-lg mb-3 flex items-center gap-2">
+<span aria-hidden="true">📊</span>
+          Element Atom Counts
+        </h2>
+<!-- Progress Bar -->
+<div class="mb-4">
+<div class="flex justify-between text-sm mb-1">
+<span class="font-medium">Balance Progress</span>
+<span class="font-semibold text-blue-600 dark:text-blue-400" id="progress-text">0%</span>
+</div>
+<div class="h-3 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="progress-fill h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full" id="progress-fill" style="width: 0%"></div>
+</div>
+</div>
+<!-- Element Count Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" id="element-counts"></div>
+<p class="mt-4 text-sm text-slate-600 dark:text-slate-400 p-3 bg-slate-100 dark:bg-slate-900/50 rounded-lg" id="status-message">
+          Adjust coefficients to balance the equation.
+        </p>
+</section>
+</main>
+<div aria-atomic="true" aria-live="polite" class="sr-only" id="live-region" role="status"></div>
+<footer class="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
+<p>Keyboard shortcuts: <kbd class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded text-xs">R</kbd> Reset • <kbd class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded text-xs">N</kbd> New • <kbd class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded text-xs">Ctrl+Z</kbd> Undo • <kbd class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded text-xs">H</kbd> Hint</p>
+</footer>
+</div>
+<script>
+        const EQUATIONS = {
+          easy: [
+            { left: ["H2", "O2"], right: ["H2O"], prompt: "Hydrogen burns in oxygen to form water.", solution: { left: [2, 1], right: [2] } },
+            { left: ["Na", "Cl2"], right: ["NaCl"], prompt: "Sodium reacts with chlorine to form table salt.", solution: { left: [2, 1], right: [2] } },
+            { left: ["N2", "H2"], right: ["NH3"], prompt: "Nitrogen and hydrogen combine to form ammonia.", solution: { left: [1, 3], right: [2] } },
+          ],
+          medium: [
+            { left: ["Fe", "O2"], right: ["Fe2O3"], prompt: "Iron rusts when exposed to oxygen.", solution: { left: [4, 3], right: [2] } },
+            { left: ["Al", "O2"], right: ["Al2O3"], prompt: "Aluminum reacts with oxygen to form aluminum oxide.", solution: { left: [4, 3], right: [2] } },
+            { left: ["C3H8", "O2"], right: ["CO2", "H2O"], prompt: "Propane burns completely in oxygen.", solution: { left: [1, 5], right: [3, 4] } },
+          ],
+          hard: [
+            { left: ["Ca(OH)2", "H3PO4"], right: ["Ca3(PO4)2", "H2O"], prompt: "Calcium hydroxide reacts with phosphoric acid.", solution: { left: [3, 2], right: [1, 6] } },
+            { left: ["KClO3"], right: ["KCl", "O2"], prompt: "Potassium chlorate decomposes when heated.", solution: { left: [2], right: [2, 3] } },
+            { left: ["C6H12O6", "O2"], right: ["CO2", "H2O"], prompt: "Glucose undergoes cellular respiration.", solution: { left: [1, 6], right: [6, 6] } },
+          ],
+          expert: [
+            { left: ["Fe2O3", "C"], right: ["Fe", "CO2"], prompt: "Iron ore is reduced by carbon in a blast furnace.", solution: { left: [2, 3], right: [4, 3] } },
+            { left: ["NH4NO3"], right: ["N2O", "H2O"], prompt: "Ammonium nitrate decomposes explosively.", solution: { left: [1], right: [1, 2] } },
+            { left: ["C2H5OH", "O2"], right: ["CO2", "H2O"], prompt: "Ethanol burns completely.", solution: { left: [1, 3], right: [2, 3] } },
+          ]
+        };
+
+        const ELEMENT_NAMES = {
+          H: "Hydrogen", O: "Oxygen", N: "Nitrogen", Fe: "Iron", C: "Carbon",
+          Al: "Aluminum", Na: "Sodium", Cl: "Chlorine", Ca: "Calcium", 
+          P: "Phosphorus", K: "Potassium", S: "Sulfur"
+        };
+
+        const state = {
+          current: null,
+          coefficients: { left: [], right: [] },
+          undoStack: [],
+          selectedToken: null,
+          score: 0,
+          streak: 0,
+          isBalanced: false,
+          difficulty: 'medium'
+        };
+
+        const refs = {
+          scenarioText: document.getElementById('scenario-text'),
+          equationContainer: document.getElementById('equation-container'),
+          tokenTray: document.getElementById('token-tray'),
+          balanceBadge: document.getElementById('balance-badge'),
+          elementCounts: document.getElementById('element-counts'),
+          statusMessage: document.getElementById('status-message'),
+          progressFill: document.getElementById('progress-fill'),
+          progressText: document.getElementById('progress-text'),
+          equationCard: document.getElementById('equation-card'),
+          score: document.getElementById('score'),
+          streak: document.getElementById('streak'),
+          difficulty: document.getElementById('difficulty'),
+          undoBtn: document.getElementById('undo-btn'),
+          resetBtn: document.getElementById('reset-btn'),
+          newBtn: document.getElementById('new-btn'),
+          hintBtn: document.getElementById('hint-btn'),
+          hintPanel: document.getElementById('hint-panel'),
+          hintList: document.getElementById('hint-list'),
+          solutionBtn: document.getElementById('solution-btn'),
+          liveRegion: document.getElementById('live-region')
+        };
+
+        function announce(message) {
+          refs.liveRegion.textContent = '';
+          requestAnimationFrame(() => { refs.liveRegion.textContent = message; });
+        }
+
+        function parseFormula(formula) {
+          let i = 0;
+      
+          function parseGroup() {
+            const group = {};
+            while (i < formula.length) {
+              if (formula[i] === '(') {
+                i++;
+                const inner = parseGroup();
+                i++;
+                const mult = parseNumber();
+                for (const el in inner) {
+                  group[el] = (group[el] || 0) + inner[el] * mult;
+                }
+              } else if (formula[i] === ')') {
+                return group;
+              } else if (/[A-Z]/.test(formula[i])) {
+                let el = formula[i++];
+                while (i < formula.length && /[a-z]/.test(formula[i])) {
+                  el += formula[i++];
+                }
+                const num = parseNumber();
+                group[el] = (group[el] || 0) + num;
+              } else {
+                i++;
+              }
+            }
+            return group;
+          }
+      
+          function parseNumber() {
+            let num = '';
+            while (i < formula.length && /\d/.test(formula[i])) {
+              num += formula[i++];
+            }
+            return num ? parseInt(num, 10) : 1;
+          }
+      
+          return parseGroup();
+        }
+
+        function countElements(compounds, coefficients) {
+          const total = {};
+          compounds.forEach((compound, idx) => {
+            const parsed = parseFormula(compound);
+            const coeff = coefficients[idx] || 1;
+            for (const el in parsed) {
+              total[el] = (total[el] || 0) + parsed[el] * coeff;
+            }
+          });
+          return total;
+        }
+
+        function getAllElements(leftCounts, rightCounts) {
+          return [...new Set([...Object.keys(leftCounts), ...Object.keys(rightCounts)])].sort();
+        }
+
+        function toSubscriptHTML(formula) {
+          return formula.replace(/(\d+)/g, '<sub class="chem-sub">$1</sub>');
+        }
+
+        function renderEquation() {
+          const { current, coefficients } = state;
+          if (!current) return;
+      
+          refs.equationContainer.innerHTML = '';
+      
+          const row = document.createElement('div');
+          row.className = 'flex items-center gap-2 sm:gap-3 flex-wrap justify-center';
+      
+          current.left.forEach((formula, idx) => {
+            if (idx > 0) row.appendChild(createOperator('+'));
+            row.appendChild(createTerm(formula, 'left', idx));
+          });
+      
+          row.appendChild(createOperator('→'));
+      
+          current.right.forEach((formula, idx) => {
+            if (idx > 0) row.appendChild(createOperator('+'));
+            row.appendChild(createTerm(formula, 'right', idx));
+          });
+      
+          refs.equationContainer.appendChild(row);
+        }
+
+        function createOperator(symbol) {
+          const span = document.createElement('span');
+          span.className = 'text-2xl sm:text-3xl font-bold text-slate-400 select-none';
+          span.setAttribute('aria-hidden', 'true');
+          span.textContent = symbol;
+          return span;
+        }
+
+        function createTerm(formula, side, idx) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'flex items-center gap-1 p-2 rounded-xl bg-gradient-to-br ' + 
+            (side === 'left' ? 'from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/50' : 
+                              'from-purple-50 to-purple-100 dark:from-purple-950/50 dark:to-purple-900/50');
+      
+          const coeff = document.createElement('button');
+          coeff.className = 'coeff-badge flex items-center justify-center w-10 h-10 rounded-lg bg-white dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-600 font-bold text-lg cursor-pointer hover:border-blue-500 focus:border-blue-500 transition-colors';
+          coeff.dataset.side = side;
+          coeff.dataset.idx = idx;
+          coeff.textContent = state.coefficients[side][idx];
+          coeff.setAttribute('aria-label', `Coefficient for ${formula}: ${state.coefficients[side][idx]}. Click to change.`);
+      
+          coeff.addEventListener('click', () => handleCoefficientClick(side, idx));
+          coeff.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -1 : 1;
+            changeCoefficient(side, idx, state.coefficients[side][idx] + delta);
+          }, { passive: false });
+      
+          const formulaEl = document.createElement('span');
+          formulaEl.className = 'text-xl sm:text-2xl font-semibold px-2';
+          formulaEl.innerHTML = toSubscriptHTML(formula);
+      
+          wrapper.appendChild(coeff);
+          wrapper.appendChild(formulaEl);
+      
+          wrapper.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            wrapper.classList.add('drop-highlight');
+          });
+          wrapper.addEventListener('dragleave', () => wrapper.classList.remove('drop-highlight'));
+          wrapper.addEventListener('drop', (e) => {
+            e.preventDefault();
+            wrapper.classList.remove('drop-highlight');
+            const value = parseInt(e.dataTransfer.getData('text/plain'), 10);
+            if (!isNaN(value)) changeCoefficient(side, idx, value);
+          });
+      
+          return wrapper;
+        }
+
+        function renderTokens() {
+          refs.tokenTray.innerHTML = '';
+      
+          const colors = [
+            'from-red-200 to-red-300 dark:from-red-800 dark:to-red-700',
+            'from-orange-200 to-orange-300 dark:from-orange-800 dark:to-orange-700',
+            'from-amber-200 to-amber-300 dark:from-amber-800 dark:to-amber-700',
+            'from-yellow-200 to-yellow-300 dark:from-yellow-800 dark:to-yellow-700',
+            'from-lime-200 to-lime-300 dark:from-lime-800 dark:to-lime-700',
+            'from-green-200 to-green-300 dark:from-green-800 dark:to-green-700',
+            'from-cyan-200 to-cyan-300 dark:from-cyan-800 dark:to-cyan-700',
+            'from-blue-200 to-blue-300 dark:from-blue-800 dark:to-blue-700',
+          ];
+      
+          for (let n = 1; n <= 8; n++) {
+            const token = document.createElement('div');
+            token.className = `token w-12 h-12 rounded-xl bg-gradient-to-br ${colors[n-1]} border-2 border-slate-400 dark:border-slate-500 flex items-center justify-center font-bold text-lg text-slate-800 dark:text-slate-100 shadow-sm`;
+            token.setAttribute('role', 'option');
+            token.setAttribute('tabindex', '0');
+            token.setAttribute('draggable', 'true');
+            token.setAttribute('aria-label', `Coefficient ${n}`);
+            token.dataset.value = n;
+            token.textContent = n;
+        
+            token.addEventListener('dragstart', (e) => {
+              e.dataTransfer.setData('text/plain', String(n));
+              token.classList.add('dragging');
+            });
+            token.addEventListener('dragend', () => token.classList.remove('dragging'));
+            token.addEventListener('click', () => selectToken(n, token));
+            token.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                selectToken(n, token);
+              }
+            });
+        
+            refs.tokenTray.appendChild(token);
+          }
+        }
+
+        function renderElementCounts() {
+          const { current, coefficients } = state;
+          if (!current) return;
+      
+          const leftCounts = countElements(current.left, coefficients.left);
+          const rightCounts = countElements(current.right, coefficients.right);
+          const elements = getAllElements(leftCounts, rightCounts);
+      
+          refs.elementCounts.innerHTML = '';
+          let balancedCount = 0;
+      
+          elements.forEach(el => {
+            const left = leftCounts[el] || 0;
+            const right = rightCounts[el] || 0;
+            const isBalanced = left === right;
+            if (isBalanced) balancedCount++;
+        
+            const card = document.createElement('div');
+            card.className = `element-card p-3 rounded-lg border-2 ${isBalanced ? 'balanced' : 'unbalanced'}`;
+            card.innerHTML = `
+              <div class="font-bold text-lg">${el}</div>
+              <div class="text-xs text-slate-600 dark:text-slate-400">${ELEMENT_NAMES[el] || el}</div>
+              <div class="mt-2 flex justify-between text-sm font-medium">
+                <span class="text-blue-700 dark:text-blue-300">L: ${left}</span>
+                <span class="text-purple-700 dark:text-purple-300">R: ${right}</span>
+              </div>
+              <div class="text-center mt-1 text-lg">${isBalanced ? '✓' : '≠'}</div>
+            `;
+            refs.elementCounts.appendChild(card);
+          });
+      
+          const percent = Math.round((balancedCount / elements.length) * 100);
+          refs.progressFill.style.width = `${percent}%`;
+          refs.progressText.textContent = `${percent}%`;
+      
+          const wasBalanced = state.isBalanced;
+          state.isBalanced = balancedCount === elements.length;
+      
+          updateBadgeAndStatus(balancedCount, elements.length);
+      
+          if (state.isBalanced && !wasBalanced) onBalanced();
+        }
+
+        function updateBadgeAndStatus(balanced, total) {
+          if (state.isBalanced) {
+            refs.balanceBadge.textContent = '✓ Balanced!';
+            refs.balanceBadge.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200 border border-green-300 dark:border-green-700';
+            refs.statusMessage.textContent = 'Excellent! All elements are balanced. The law of conservation of mass is satisfied.';
+            refs.equationCard.classList.add('success-glow');
+          } else {
+            refs.balanceBadge.textContent = 'Not Balanced';
+            refs.balanceBadge.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200 border border-amber-300 dark:border-amber-700';
+            refs.statusMessage.textContent = `${balanced} of ${total} elements balanced. Adjust coefficients to match atom counts on both sides.`;
+            refs.equationCard.classList.remove('success-glow');
+          }
+        }
+
+        function handleCoefficientClick(side, idx) {
+          if (state.selectedToken !== null) {
+            changeCoefficient(side, idx, state.selectedToken);
+            clearTokenSelection();
+          }
+        }
+
+        function selectToken(value, element) {
+          clearTokenSelection();
+          state.selectedToken = value;
+          element.classList.add('ring-4', 'ring-blue-500', 'scale-110');
+          announce(`Selected coefficient ${value}. Click on a compound to apply.`);
+        }
+
+        function clearTokenSelection() {
+          state.selectedToken = null;
+          refs.tokenTray.querySelectorAll('.token').forEach(t => {
+            t.classList.remove('ring-4', 'ring-blue-500', 'scale-110');
+          });
+        }
+
+        function changeCoefficient(side, idx, value) {
+          const clamped = Math.max(1, Math.min(12, value));
+      
+          state.undoStack.push(JSON.parse(JSON.stringify(state.coefficients)));
+          if (state.undoStack.length > 20) state.undoStack.shift();
+          refs.undoBtn.disabled = false;
+      
+          state.coefficients[side][idx] = clamped;
+      
+          const badge = refs.equationContainer.querySelector(`[data-side="${side}"][data-idx="${idx}"]`);
+          if (badge) {
+            badge.textContent = clamped;
+            badge.classList.add('changed');
+            setTimeout(() => badge.classList.remove('changed'), 300);
+          }
+      
+          renderElementCounts();
+          announce(`Set coefficient to ${clamped}`);
+        }
+
+        function undo() {
+          if (state.undoStack.length === 0) return;
+          state.coefficients = state.undoStack.pop();
+          refs.undoBtn.disabled = state.undoStack.length === 0;
+          renderEquation();
+          renderElementCounts();
+          announce('Undid last change');
+        }
+
+        function reset() {
+          state.undoStack.push(JSON.parse(JSON.stringify(state.coefficients)));
+          refs.undoBtn.disabled = false;
+      
+          state.coefficients.left = state.current.left.map(() => 1);
+          state.coefficients.right = state.current.right.map(() => 1);
+      
+          renderEquation();
+          renderElementCounts();
+          clearTokenSelection();
+          announce('Coefficients reset to 1');
+        }
+
+        function loadNewEquation() {
+          const equations = EQUATIONS[state.difficulty];
+          const idx = Math.floor(Math.random() * equations.length);
+          state.current = equations[idx];
+      
+          state.coefficients = {
+            left: state.current.left.map(() => 1),
+            right: state.current.right.map(() => 1)
+          };
+          state.undoStack = [];
+          state.isBalanced = false;
+          refs.undoBtn.disabled = true;
+      
+          refs.scenarioText.textContent = state.current.prompt;
+          refs.equationCard.classList.remove('success-glow');
+          refs.hintPanel.classList.add('hidden');
+          refs.hintBtn.setAttribute('aria-expanded', 'false');
+      
+          renderEquation();
+          renderTokens();
+          renderElementCounts();
+          clearTokenSelection();
+      
+          announce(`New equation: ${state.current.prompt}`);
+        }
+
+        function onBalanced() {
+          const pointsMap = { easy: 10, medium: 20, hard: 35, expert: 50 };
+          const points = pointsMap[state.difficulty];
+          state.score += points * (1 + state.streak * 0.1);
+          state.streak++;
+      
+          refs.score.textContent = Math.round(state.score);
+          refs.streak.textContent = state.streak;
+      
+          celebrate();
+          announce(`Balanced! You earned ${points} points. Streak: ${state.streak}`);
+        }
+
+        function celebrate() {
+          const emojis = ['⚛️', '🧪', '✨', '🎉', '💫', '🔬'];
+          for (let i = 0; i < 20; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.fontSize = (14 + Math.random() * 12) + 'px';
+            confetti.style.animationDelay = Math.random() * 0.5 + 's';
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 2000);
+          }
+        }
+
+        function toggleHints() {
+          const isHidden = refs.hintPanel.classList.toggle('hidden');
+          refs.hintBtn.setAttribute('aria-expanded', String(!isHidden));
+          if (!isHidden) generateHints();
+        }
+
+        function generateHints() {
+          const hints = [
+            "Start by counting atoms of each element on both sides.",
+            "Balance elements that appear in only one compound on each side first.",
+            "Leave oxygen and hydrogen for last in combustion reactions.",
+            "Only change coefficients (numbers in front), never subscripts.",
+            "Look for the least common multiple when atoms don't divide evenly.",
+            "Polyatomic ions (like PO₄) can be balanced as a unit if unchanged."
+          ];
+      
+          refs.hintList.innerHTML = '';
+          hints.forEach(hint => {
+            const li = document.createElement('li');
+            li.textContent = hint;
+            refs.hintList.appendChild(li);
+          });
+        }
+
+        function showSolution() {
+          if (!state.current?.solution) return;
+      
+          state.coefficients.left = [...state.current.solution.left];
+          state.coefficients.right = [...state.current.solution.right];
+      
+          state.streak = 0;
+          refs.streak.textContent = '0';
+      
+          renderEquation();
+          renderElementCounts();
+          announce('Solution shown. Streak reset.');
+        }
+
+        function setupEventListeners() {
+          refs.newBtn.addEventListener('click', loadNewEquation);
+          refs.resetBtn.addEventListener('click', reset);
+          refs.undoBtn.addEventListener('click', undo);
+          refs.hintBtn.addEventListener('click', toggleHints);
+          refs.solutionBtn.addEventListener('click', showSolution);
+      
+          refs.difficulty.addEventListener('change', (e) => {
+            state.difficulty = e.target.value;
+            loadNewEquation();
+          });
+      
+          document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+        
+            switch (e.key.toLowerCase()) {
+              case 'r': reset(); break;
+              case 'n': loadNewEquation(); break;
+              case 'z': if (e.ctrlKey || e.metaKey) undo(); break;
+              case 'h': toggleHints(); break;
+            }
+          });
+        }
+
+        function init() {
+          setupEventListeners();
+          loadNewEquation();
+        }
+
+        init();
+      </script>
+</body>
+</html>
