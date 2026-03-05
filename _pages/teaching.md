@@ -53,6 +53,8 @@ One of the key challenges that all students will face when learning complex topi
 - [Chemistry Unit Cancelling](https://liamscarratt-cloud.github.io/teaching/Dimension-analysis-lab.html){:target="_blank"}: Practice dimensional analysis to verify and manipulate physical equations. In science, we use mathematical equations to represent physical phenomena. It is important to understand that variables in equations have physical dimensions, known as units, and that when doing maths with these equations we need our units to cancel into the correct unit for the variable we want to measure.
 - [Dilution Lab](https://liamscarratt-cloud.github.io/teaching/ChemSolutions/){:target="_blank"}: Observe how the concentration of solutions is affected by manipulating moles and volume. In chemistry we use solutions, which are essentially a quantity of molecules or ions dissolved in a certain volume of liquid. The ratio of the amount (in moles) to the volume of the liquid is called the concentration, often expressed as mol/L.
 
+<div id="private-tutoring" style="padding-top: 80px; margin-top: -80px;"></div>
+
 Private Tutoring
 ------
 
