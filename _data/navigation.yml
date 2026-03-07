@@ -14,13 +14,13 @@ main:
  - title: "Teaching"
     url: /teaching/    
 
-  - title: "Research"
+ - title: "Research"
     url: /publications/    
 
-   - title: "Creative Projects"
+ - title: "Creative Projects"
     url: /portfolio/
 
-  - title: "Curriculum Vitae"
+ - title: "Curriculum Vitae"
     url: /cv/
     
   # - title: "Tutoring"
