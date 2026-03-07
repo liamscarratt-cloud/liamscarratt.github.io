@@ -51,10 +51,30 @@ Alongside my work in chemistry and education, I have a long-standing involvement
 
 ## Science Communication & Outreach
 
+Public engagement and science communication have been a consistent part of my professional life across my time in Australia, Switzerland, and the UK. Below is a record of my involvement in outreach events, public presentations, and community-building activities.
+
+### SciFilmIt Hackathon
+
 [SciFilmIt](https://scifilmit.com/){:target="_blank"} is an international science outreach hackathon in which scientists, artists, and filmmakers collaborate over three days to create short films communicating current research to the public, with a public screening at a local cinema. I was involved across multiple events in different capacities:
 
-2023: **Project Lead** for the inaugural SciFilmIt Hackathon in the UK - acquiring Research England funding (£14,420), forming and leading the organising team, and bringing together participants from across the University of Bristol and beyond, UK
+2023: **Project Lead** for the inaugural SciFilmIt Hackathon in the UK — acquiring Research England funding (£14,420), forming and leading the organising team, and bringing together participants from across the University of Bristol and beyond, UK
 
-2021: **Team Mentor** for SciFilmIt Hackathon Lausanne - delivering a guest lecture on science communication through artistic mediums and guiding a participant team through the filmmaking process, Switzerland
+2021: **Team Mentor** for SciFilmIt Hackathon Lausanne — delivering a guest lecture on science communication through artistic mediums and guiding a participant team through the filmmaking process, Switzerland
 
-2020: **Organising Committee Member** for SciFilmIt Hackathon Geneva - coordinating venue logistics, catering, and event flow across the 3-day program, Switzerland
+2020: **Organising Committee Member** for SciFilmIt Hackathon Geneva — coordinating venue logistics, catering, and event flow across the 3-day program, Switzerland
+
+### Community & Public Engagement
+
+2025: **Demonstrator** at UNSW College Open Day — live chemistry demonstrations for prospective students and the public, NSW
+
+2022: **Demonstrator** at University of Bristol Chemistry Open Day — hands-on demonstrations for high school students exploring university study, UK
+
+2021: **Presenter** at Futures European Researcher's Night, Bristol — a public engagement event connecting researchers with general audiences, UK
+
+2020: **Presenter** at Science Communication event, Lausanne, Switzerland
+
+2018: **Presenter** at Nanoscience/Still Life Art Exhibition, University of Sydney Science Festival — presenting research at the intersection of nanoscience and visual art, NSW
+
+2016: **Presenter** at Speed Meet a Scientist, Sydney — rapid-fire public science communication event, NSW
+
+2016: **Interactive booth** at the Vice Chancellor's Night, The University of Sydney, NSW
