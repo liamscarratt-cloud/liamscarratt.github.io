@@ -37,12 +37,26 @@ UNSW College Courses
 Teaching Philosophy
 ------
 
-Through my teaching I have found that the principles taught in chemistry can be challenging to fully grasp, an issue that is highlighted well by [Johnstone's Triangle](https://edu.rsc.org/resources/collections/johnstones-triangle-resources){:target="_blank"}. Learning chemistry requires students to develop their understanding of concepts across three different levels; macroscopic, submicroscopic, and the symbolic, and crucially, to build connections between them. At the high school level, time is spent predominantly on the symbolic level, focusing on chemical equations and calculating moles etc, with some involvement of the macroscopic level regarding what we can see with our eyes when chemical reactions take place. 
+### The Challenge
 
-Learning chemistry at university leans more heavily on the submicroscopic level, where students develop their understanding of how atoms and molecules behave individually and in respect to each other, whilst ideally also making connections to the symbolic and macroscopic in parallel. This division in focus between high school and university chemistry on different parts of Johnstone's Triangle makes for an experience of whiplash for students when starting their university studies, as the skills used to understand chemical principles at the submicroscopic level can be rather different to those of the symbolic and macroscopic. Additionally, it is difficult to balance all three conceptual domains when learning at the pace of first-year university, leading to gaps in the mental model we are trying to develop.
+Chemistry is notoriously difficult to teach well, not because the concepts are beyond students, but because they must be understood simultaneously at three distinct levels. This challenge is captured well by [Johnstone's Triangle](https://edu.rsc.org/resources/collections/johnstones-triangle-resources){:target="_blank"}: the macroscopic (what we observe), the submicroscopic (how atoms and molecules behave), and the symbolic 
+(equations, notation, and calculation). Effective chemistry understanding requires students to build connections *between* all three, not just to master each in isolation.
 
-This challenge is one I navigated personally as a student. During my time studying, I struggled with the balancing of these different conceptual domains, only really getting my head around them during my PhD studies. Upon reflection, the pace and nature of research make for an ideal environment to learn how to connect the different domains of chemistry effectively; you have 3-4 years working on a small selection of chemical systems, and you are required to fully understand all interconnected aspects in order to push your research further. Research is inquiry-based learning at its core, which I believe is crucial for developing your scientific reasoning and chemical intuition. Thus, my teaching style draws heavily upon my experiences as a researcher in chemistry, as I work with students to actively make the crucial connections between the macroscopic, submicroscopic and symbolic, by encouraging curiosity and reinforcing key fundamental ideas that build confidence in the complex.
+High school chemistry focuses predominantly on the symbolic and macroscopic levels. University chemistry shifts the emphasis toward the submicroscopic, demanding that students rapidly develop new ways of thinking while maintaining their grasp of the other two domains. This shift can feel like whiplash, and it is one of the primary reasons first-year students find university chemistry so disorienting.
 
+### A Personal Perspective
+
+This is a challenge I navigated myself as a student. I struggled with connecting the three conceptual domains throughout my undergraduate degree, and only fully resolved it during my PhD, where the pace and depth of research finally gave me the time and 
+context to build those connections properly. Research is, at its core, inquiry-based learning: you spend years immersed in a small set of problems, and you are required to understand every interconnected aspect in order to push further.
+
+That experience profoundly shaped how I think about teaching.
+
+### My Approach
+
+My teaching practice is built around actively making the connections between the macroscopic, submicroscopic, and symbolic visible and explicit for students, rather than assuming those connections will form on their own. I draw on inquiry-based principles to encourage curiosity, ask questions that cut across the three domains, and focus on reinforcing the key fundamental ideas that give students the confidence to engage with more complex material.
+
+This philosophy directly informs my research in Chemistry Education, where I investigate how evidence-based pedagogy and generative AI tools can support student preparation, engagement, and conceptual understanding. You can read more on the 
+[Research](/publications/) page.
 
 Interactive Chemistry Education Tools
 ------
