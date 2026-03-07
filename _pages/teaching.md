@@ -77,7 +77,7 @@ I offer private tutoring in **high school chemistry and science** for students i
 - IB Chemistry (SL & HL)
 - General chemistry exam preparation and study skills
 
-**My approach** draws on research-informed pedagogy, with a focus on building the connections between macroscopic, submicroscopic, and symbolic representations that are particularly relevant for HSC Band 6 and IB 7 preparation.
+**My approach** draws on research-informed pedagogy, with a focus on building the connections between macroscopic (what you see in the lab), submicroscopic (how atoms and molecules are behaving), and symbolic (chemical equations and formulae) representations that are particularly relevant for HSC Band 6 and IB 7 preparation.
 
 For **Science Extension**, I bring direct research experience across a PhD and two international postdoctoral appointments. I can help students develop strong research questions, design rigorous experiments, analyse data, and write with clarity and precision.
 
