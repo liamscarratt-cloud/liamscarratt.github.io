@@ -5,17 +5,7 @@ permalink: /portfolio/
 author_profile: true
 ---
 
-Alongside my work in chemistry and education, I have a long-standing involvement in music, comedy, and performance across Australia, Europe, and beyond. Below is a record of projects, productions, and performances I have been part of.
-
-## SciFilmIt
-
-During my time in Switzerland and UK, I was involved in an ambitious Swiss based science outreach event, [SciFilmIt](https://scifilmit.com/){:target="_blank"}. Scientists, artists, and filmmakers would come together over a 3 day hackathon to create short films that would communicate current research to the general public, which would be showcased at a local cinema. My contributions to this event were as follows: 
-
-2023: **Project Lead** for the first SciFilmIt hackathon in the UK - acquiring funding, forming and leading the organising team, and bringing people together across the University of Bristol and beyond to attend, UK
-
-2021: **Team Mentor** for SciFilmIt hackathon Lausanne - giving a guest lecture on science communication through artistic mediums and guiding a participant team through their science filmmaking process, Switzerland
-
-2020: **Logistics** member of the organising team for the SciFilmIt hackthon Geneva - ensuring the event ran smoothly over the 3 days, liasing with venue staff and food providers in preparation, Switzerland
+Alongside my work in chemistry and education, I have a long-standing involvement in music, comedy, and science outreach across Australia, Europe, and beyond. Below is a record of projects, productions, and performances I have been part of.
 
 ## Comedy and Theatre
 
@@ -58,3 +48,13 @@ During my time in Switzerland and UK, I was involved in an ambitious Swiss based
 2011: **Lead singer and guitarist** in Alt Rock band *Thayne*, NSW
 
 2007–2010: **Lead singer and guitarist** in Alt Rock band *Mind Priorities*, NSW
+
+## Science Communication & Outreach
+
+[SciFilmIt](https://scifilmit.com/){:target="_blank"} is an international science outreach hackathon in which scientists, artists, and filmmakers collaborate over three days to create short films communicating current research to the public, with a public screening at a local cinema. I was involved across multiple events in different capacities:
+
+2023: **Project Lead** for the inaugural SciFilmIt Hackathon in the UK - acquiring Research England funding (£14,420), forming and leading the organising team, and bringing together participants from across the University of Bristol and beyond, UK
+
+2021: **Team Mentor** for SciFilmIt Hackathon Lausanne - delivering a guest lecture on science communication through artistic mediums and guiding a participant team through the filmmaking process, Switzerland
+
+2020: **Organising Committee Member** for SciFilmIt Hackathon Geneva - coordinating venue logistics, catering, and event flow across the 3-day program, Switzerland
