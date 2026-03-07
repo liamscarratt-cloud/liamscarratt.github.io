@@ -5,7 +5,7 @@ permalink: /portfolio/
 author_profile: true
 ---
 
-Alongside my work in chemistry and education, I have a long-standing involvement in music, comedy, and science outreach across Australia, Europe, and beyond. Below is a record of projects, productions, and performances I have been part of.
+Alongside my work in chemistry and education, I have a long-standing involvement in music, comedy, and performance. Below is a record of projects, productions, and performances I have been part of."
 
 ## Comedy and Theatre
 
