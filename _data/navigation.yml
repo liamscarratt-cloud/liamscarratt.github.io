@@ -11,16 +11,16 @@ main:
   ##- title: "About"
    ## url: /about/
 
- - title: "Teaching"
-    url: /teaching/    
+  - title: "Teaching"
+    url: /teaching/
 
- - title: "Research"
-    url: /publications/    
+  - title: "Research"
+    url: /publications/
 
- - title: "Creative Projects"
+  - title: "Creative Projects"
     url: /portfolio/
 
- - title: "Curriculum Vitae"
+  - title: "Curriculum Vitae"
     url: /cv/
     
   # - title: "Tutoring"
