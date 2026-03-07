@@ -9,9 +9,9 @@ Alongside my work in chemistry and education, I have a long-standing involvement
 
 ## Comedy and Theatre
 
-2024-2025: **Guest Writer, Technical Director and Composer** for Live Interactive Videogame, *Karate Man*, NSW
+2024-2025: **Guest Writer, Technical Director and Composer** for *Karate Man, A Live-Action Videogame*, NSW and SA
 
-2024: **Track Production** for *Converted*, an Original Australian Musical — [atyp.com.au](https://www.atyp.com.au/productions/converted){:target="_blank"}
+2024: **Track Production** for *Converted*, an Original Australian Musical — [atyp.com.au](https://www.atyp.com.au/productions/converted){:target="_blank"}, NSW
 
 2023: **Live musician and technician** for *Do Not Resuscitate* alternative comedy night in London, with Edinburgh Fringe performance, UK
 
