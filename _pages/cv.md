@@ -7,12 +7,6 @@ redirect_from:
   - /resume
 ---
 
-<style>
-  ul li, ol li {
-    text-align: justify;
-  }
-</style>
-
 A full record of my academic qualifications, employment history, awards, and conference presentations.
 
 ## Academic Qualifications
