@@ -9,7 +9,7 @@
 # Basic Site Settings
 locale                   : "en-US"
 site_theme               : "default" # The available themes options are "default", "air", "sunrise", "mint", "dirt" and "contrast"
-title                    : "Home"
+title                    : "About"
 title_separator          : "-"
 name                     : &name "Liam Scarratt"
 description              : &description "Chemistry Educator and Researcher at UNSW College, Sydney"   # Update this with a general description of your site, this is the default if not overridden by a page
@@ -67,7 +67,7 @@ author:
   keybase          : # Username
   instagram        : # Username
   lastfm           : # Username
-  linkedin         : # Username
+  linkedin         : liamscarratt
   mastodon         : # URL
   medium           : # URL
   pinterest        : # Username
