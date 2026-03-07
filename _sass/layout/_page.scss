@@ -400,15 +400,3 @@
   text-transform: uppercase;
 }
 
-// Justified text on desktop, left-aligned on mobile
-.page__content {
-  text-align: left; // default for mobile
-
-  @include breakpoint($large) {
-    text-align: justify;
-
-    p, li {
-      text-align: justify;
-    }
-  }
-}
