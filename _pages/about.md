@@ -1,5 +1,5 @@
 ---
-title: "Liam Scarratt | Chemistry Educator & Researcher"
+title: "Dr Liam R. J. Scarratt"
 permalink: /
 author_profile: true
 redirect_from: 
