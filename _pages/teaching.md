@@ -1,8 +1,9 @@
 ---
 layout: single
-title: "Teaching"
+title: "Teaching & Tutoring"
 permalink: /teaching/
 author_profile: true
+description: "University chemistry teaching, interactive education tools, and private HSC Chemistry, Science Extension, and IB Chemistry tutoring offered by Dr Liam R. J. Scarratt, Sydney."
 ---
 
 I currently run the first-year university chemistry courses at **UNSW College** as its lecturer, alongside teaching tutorials and demonstrating for laboratory classes. My teaching practice is informed by my ongoing research into chemistry education and pedagogy, alongside interdisciplinary collaborations with my colleagues at UNSW College.
