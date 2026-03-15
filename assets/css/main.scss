@@ -74,3 +74,10 @@
 .nav__list a {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
+
+/* Fix h3 heading size — paper/project titles appear larger than body text */
+.page__content h3 {
+  font-size: 1.4em;
+  margin-top: 1.4em;
+  margin-bottom: 0.3em;
+}
