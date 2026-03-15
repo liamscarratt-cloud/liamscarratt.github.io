@@ -70,21 +70,4 @@ A collection of photos from performances, gigs, and events across Sydney, Bristo
 
 {% include gallery %}
 
-<script>
-$(document).ready(function() {
-  setTimeout(function() {
-    $(".image-popup").magnificPopup('destroy');
-    $(".image-popup").magnificPopup({
-      type: "image",
-      titleSrc: "title",
-      gallery: { enabled: true },
-      callbacks: {
-        markupParse: function(template, values, item) {
-          values.title = item.el.attr("title");
-        }
-      }
-    });
-  }, 200);
-});
-</script>
 
