@@ -34,7 +34,7 @@
           {% endif %}
           alt="{% if img.alt %}{{ img.alt }}{% endif %}">
       </a>
-      {% if img.title %}<p class="gallery-caption">{{ img.title }}</p>{% endif %}
+      
     
     {% else %}
       <img src=
