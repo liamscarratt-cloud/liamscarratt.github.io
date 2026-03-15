@@ -66,6 +66,8 @@ gallery:
     title: "Interview, Bristol, 2023"
 ---
 
+A collection of photos from performances, gigs, and events across Sydney, Bristol, Geneva, and London.
+
 {% include gallery %}
 
 <script>
