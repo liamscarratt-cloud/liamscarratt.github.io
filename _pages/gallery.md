@@ -70,16 +70,19 @@ gallery:
 
 <script>
 $(document).ready(function() {
-  $(".image-popup").magnificPopup({
-    type: "image",
-    titleSrc: "title",
-    gallery: { enabled: true },
-    callbacks: {
-      markupParse: function(template, values, item) {
-        values.title = item.el.attr("title");
+  setTimeout(function() {
+    $(".image-popup").magnificPopup('destroy');
+    $(".image-popup").magnificPopup({
+      type: "image",
+      titleSrc: "title",
+      gallery: { enabled: true },
+      callbacks: {
+        markupParse: function(template, values, item) {
+          values.title = item.el.attr("title");
+        }
       }
-    }
-  });
+    });
+  }, 200);
 });
 </script>
 
